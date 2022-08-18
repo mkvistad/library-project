@@ -3,7 +3,7 @@ import Welcome from "./Welcome.js";
 
 ReactDOM.render(<HelloWorld />, document.querySelector("main"));
 
-fetch("/user/id.json")
+fetch("/api/users")
     .then((response) => response.json())
     .then((user) => {
         if (!user) {

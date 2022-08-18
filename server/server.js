@@ -9,12 +9,12 @@ console.log(secret);
 
 //🚨 remember to connect //
 const {
-    // createSignature,
     createUser,
-    // getSignatureByUserId,
-    // login,
-    // createUserProfile,
     getUserById,
+    login,
+    // createSignature,
+    // getSignatureByUserId,
+    // createUserProfile,
 } = require("./db");
 
 // ******* End variable list ******* //
@@ -52,7 +52,7 @@ app.get("/api/users", (request, response) => {
         response.json(null);
         return;
     }
-    // getSigners() used from petition
+
     getUserById()
         .then(request.session.user_id)
         .then((user) => {
@@ -66,6 +66,24 @@ app.post("/api/users", (request, response) => {
         request.session.user_id = newUser.id;
         response.json(newUser);
     });
+});
+
+app.post("/api/login", (request, response) => {
+    console.log("POST /api/login", request.body);
+    login(request.body)
+        .then((user) => {
+            if (!user) {
+                response.json({ error: "wrong login" });
+                return;
+            }
+            request.session.user_id = user.id;
+            response.json(user);
+        })
+        .catch((error) => {
+            console.log("POST /api/login", error);
+            response.status(500).json({ error: "something went wrong" });
+        });
+    console.log("login", login);
 });
 
 //*********  Always in end position *********//

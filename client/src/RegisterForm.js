@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 
 export default class RegisterForm extends Component {
     constructor(props) {
@@ -30,36 +31,45 @@ export default class RegisterForm extends Component {
                     this.setState({ error: "error POSTing registration form" });
                     return;
                 } else {
-                    window.location.href = "/"; //add to login to-do
+                    window.location.href = "/";
                 }
             });
     }
     render() {
         return (
-            ////insert form data from html in imageboard using the render cues from the counter//
-            <form onSubmit={this.onFormSubmit}>
-                <input
-                    name="first_name"
-                    type="first_name"
-                    placeholder="First Name"
-                    required
-                />
-                <input
-                    name="last_name"
-                    type="last_name"
-                    placeholder="Last Name"
-                    required
-                />
-                <input name="email" type="email" placeholder="Email" required />
-                <input
-                    name="password"
-                    type="password"
-                    placeholder="Password"
-                    required
-                />
-                {/* example from Diego on Wednesday...unsure how to implement...{this.error && <p>{this.error}</p>} */}
-                <button>Click Here To Submit Registration</button>
-            </form>
+            <div>
+                <form onSubmit={this.onFormSubmit}>
+                    <input
+                        name="first_name"
+                        type="first_name"
+                        placeholder="First Name"
+                        required
+                    />
+                    <input
+                        name="last_name"
+                        type="last_name"
+                        placeholder="Last Name"
+                        required
+                    />
+                    <input
+                        name="email"
+                        type="email"
+                        placeholder="Email"
+                        required
+                    />
+                    <input
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        required
+                    />
+                    {/* example from Diego on Wednesday...unsure how to implement...{this.error && <p>{this.error}</p>} */}
+                    <button>Click Here To Submit Registration</button>
+                </form>
+                <Link to="/login">
+                    Already registered? Click here to log in.
+                </Link>
+            </div>
         );
     }
 }

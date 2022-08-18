@@ -24,20 +24,42 @@ function createUser({ first_name, last_name, email, password }) {
             .then((result) => result.rows[0]);
     });
 }
-
 function getUserById(id) {
     return db
         .query(`SELECT * FROM users WHERE id=$1`, [id])
         .then((result) => result.rows[0]);
 }
+function getUserByEmail(email) {
+    return db
+        .query(`SELECT * FROM users WHERE email=$1`, [email])
+        .then((result) => result.rows[0]);
+}
+
+function login({ email, password }) {
+    return getUserByEmail(email).then((user) => {
+        if (!user) {
+            console.log("incorrect email");
+            return null;
+        }
+        console.log("user email not found");
+        return bcrypt.compare(password, user.password_hash).then((match) => {
+            if (match) {
+                console.log("password matches user");
+                return user;
+            }
+            console.log("incorrect password");
+            return null;
+        });
+    });
+}
 
 /*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
 module.exports = {
-    // createSignature,
-    getUserById,
     createUser,
+    getUserById,
+    login,
+    // createSignature,
     // getSignatureByUserId,
-    // login,
     // createUserProfile,
     // getSigners,
 };
