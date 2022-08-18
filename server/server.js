@@ -47,7 +47,7 @@ app.use(
 //         userId: req.session.userId,
 //     });
 // });
-app.get("/user/id.json", (request, response) => {
+app.get("/api/users", (request, response) => {
     if (!request.session.user_id) {
         response.json(null);
         return;
@@ -59,7 +59,7 @@ app.get("/user/id.json", (request, response) => {
             response.json(user);
         });
 });
-app.post("/user/id.json", (request, response) => {
+app.post("/api/users", (request, response) => {
     console.log("post user", request.body);
     createUser(request.body).then((newUser) => {
         console.log("newUser setup working", newUser);

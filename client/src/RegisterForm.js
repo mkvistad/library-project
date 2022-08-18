@@ -2,66 +2,67 @@ import { Component } from "react";
 
 export default class RegisterForm extends Component {
     constructor(props) {
-      super(props);
-      this.state = {
-        error: "",
-      };
-  
-      this.onFormSubmit = this.onFormSubmit.bind(this);
+        super(props);
+        this.state = {
+            error: "",
+        };
+
+        this.onFormSubmit = this.onFormSubmit.bind(this);
     }
     onFormSubmit(event) {
-        event.????
+        event.preventDefault();
         const formInput = {
             first_name: event.target.first_name.value,
-            last_name: event.target.last_name.value, 
-            email: event.target.email.value, 
+            last_name: event.target.last_name.value,
+            email: event.target.email.value,
             password: event.target.password.value,
         };
-        fetch("/user/id.json", {
+        fetch("/api/users", {
             method: "POST",
-            body: JSON.stringify(formInput), 
-            headers: { ??? },
+            body: JSON.stringify(formInput),
+            headers: {
+                "Content-Type": "application/json",
+            },
         })
-        .then((response)=> response.json())
-        .then((data)=> {
-            if (data.error) {
-                this.setState({ error: "error POSTing registration form"});
-                return;
-            } else {
-                //send back to home page//
-            }
-        });
-        render() {
-            return (
-                ////insert form data from html in imageboard using the render cues from the counter//
-                <form onSubmit={this.onFormSubmit}>
-                    <input
-                        name="first_name"
-                        type="first_name"
-                        placeholder="First Name"
-                        required
-                    />
-                    <input
-                        name="last_name"
-                        type="last_name"
-                        placeholder="First Name"
-                        required
-                    />
-                    <input name="email" type="email" placeholder="Email" required />
-                    <input
-                        name="password"
-                        type="password"
-                        placeholder="Password"
-                        required
-                    />
-                    {/* example from Diego on Wednesday...unsure how to implement...{this.error && <p>{this.error}</p>} */}
-                    <button>Click Here To Submit Registration</button>
-                </form>
-            )
-        }
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.error) {
+                    this.setState({ error: "error POSTing registration form" });
+                    return;
+                } else {
+                    window.location.href = "/"; //add to login to-do
+                }
+            });
+    }
+    render() {
+        return (
+            ////insert form data from html in imageboard using the render cues from the counter//
+            <form onSubmit={this.onFormSubmit}>
+                <input
+                    name="first_name"
+                    type="first_name"
+                    placeholder="First Name"
+                    required
+                />
+                <input
+                    name="last_name"
+                    type="last_name"
+                    placeholder="Last Name"
+                    required
+                />
+                <input name="email" type="email" placeholder="Email" required />
+                <input
+                    name="password"
+                    type="password"
+                    placeholder="Password"
+                    required
+                />
+                {/* example from Diego on Wednesday...unsure how to implement...{this.error && <p>{this.error}</p>} */}
+                <button>Click Here To Submit Registration</button>
+            </form>
+        );
     }
 }
-
 
 // inspiration from counter practice
 // export default function App() {
