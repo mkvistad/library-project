@@ -5,14 +5,11 @@ ReactDOM.render(<HelloWorld />, document.querySelector("main"));
 
 fetch("/user/id.json")
     .then((response) => response.json())
-    .then((data) => {
-        if (!data.userId) {
+    .then((user) => {
+        if (!user) {
             ReactDOM.render(<Welcome />, document.querySelector("main"));
         } else {
-            ReactDOM.render(
-                <img src="/logo.gif" alt="logo" />,
-                document.querySelector("main")
-            );
+            ReactDOM.render(<HelloWorld />, document.querySelector("main"));
         }
     });
 
