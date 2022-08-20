@@ -1,3 +1,26 @@
 body {
-    background-color: ghostwhite;
+    background-color: rgba(14, 137, 175, 0.69);
+}
+
+.welcome {
+    font-family: Arial, Helvetica, sans-serif;
+    color: sienna;
+    font-style: italic;
+    font-weight: lighter;
+}
+
+.button {
+    box-shadow: inset;
+    border-radius: 10;
+    background-color: deepskyblue;
+}
+
+.HelloWorld {
+font-family: Arial, Helvetica, sans-serif;
+    color: rgb(88, 17, 1);
+    font-style: italic;
+    font-variant: small-caps;
+    font-size: xx-large;
+    margin-top: 200px;
+    margin-left: 120px;
 }

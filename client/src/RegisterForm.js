@@ -64,7 +64,9 @@ export default class RegisterForm extends Component {
                         required
                     />
                     {/* example from Diego on Wednesday...unsure how to implement...{this.error && <p>{this.error}</p>} */}
-                    <button>Click Here To Submit Registration</button>
+                    <button Class="button">
+                        Click Here To Submit Registration
+                    </button>
                 </form>
                 <Link to="/login">
                     Already registered? Click here to log in.
@@ -73,51 +75,3 @@ export default class RegisterForm extends Component {
         );
     }
 }
-
-// inspiration from counter practice
-// export default function App() {
-//   return (
-//     <div className="App">
-//       <h1>Counter</h1>
-
-//       <Counter user="Adults" initialNumber={3} />
-
-//       <Counter user="Children" initialNumber={0} />
-//     </div>
-//   );
-// }
-
-// class Counter extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       count: props.initialNumber
-//     };
-
-//     this.onPlusClick = this.onPlusClick.bind(this);
-//     this.onMinusClick = this.onMinusClick.bind(this);
-//   }
-
-//   onPlusClick() {
-//     this.setState({
-//       count: Math.min(this.state.count + 1, 13)
-//     });
-//   }
-
-//   onMinusClick() {
-//     this.setState({
-//       count: Math.max(this.state.count - 1, 0)
-//     });
-//   }
-
-//   render() {
-//     return (
-//       <div>
-//         <h2>{this.props.user} </h2>
-//         <button onClick={this.onPlusClick}>Plus</button>
-//         <p>{this.state.count} </p>
-//         <button onClick={this.onMinusClick}>Minus</button>
-//       </div>
-//     );
-//   }
-// }

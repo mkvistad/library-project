@@ -8,3 +8,13 @@ CREATE TABLE users (
     password_hash VARCHAR NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE reset_userinput(
+    id SERIAL PRIMARY KEY
+    email VARCHAR NOT NULL
+    code VARCHAR NOT NULL
+    timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- psql -d social-network -f setup.sql
+

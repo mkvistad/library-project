@@ -14,6 +14,7 @@ const bcrypt = require("bcryptjs");
 const hash = (password) =>
     bcrypt.genSalt().then((salt) => bcrypt.hash(password, salt));
 
+/// Register User ///
 function createUser({ first_name, last_name, email, password }) {
     return hash(password).then((password_hash) => {
         return db
@@ -35,6 +36,7 @@ function getUserByEmail(email) {
         .then((result) => result.rows[0]);
 }
 
+/// Login ///
 function login({ email, password }) {
     return getUserByEmail(email).then((user) => {
         if (!user) {
@@ -52,6 +54,46 @@ function login({ email, password }) {
         });
     });
 }
+
+/// Reset Password ///
+// const cryptoRandomString = require("crypto-random-string");
+// const secretCode = cryptoRandomString({
+//     length: 6,
+// });
+
+// function resetCode(email, secretCode) {
+//     return getUserByEmail(email).then((foundUser) => {
+//         if (!foundUser) {
+//             console.log("email not found!");
+//             return null;
+//         }
+//         return
+// .then((email, code, created_at) => {
+//             return db
+//                 .query(
+//                     `INSERT INTO reset_codes (email, code, created_at) VALUES ($1, $2, $3) RETURNING *`,
+//                     [email, code, created_at]
+//                 )
+//                 .then((result) => result.rows[0]);
+//         });
+//     });
+// }
+
+// function verifyCode() {
+//     return db.query(`SELECT * FROM reset_codes
+// WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';`);
+// }
+
+// function changePassword() {
+//     return hash(password).then((password_hash) => {
+//         return db
+//             .query(
+//                 `INSERT INTO users (password_hash) VALUES ($1) RETURNING *`,
+//                 [password_hash]
+//             )
+//             .then((result) => result.rows[0]);
+//     });
+// }
 
 /*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
 module.exports = {

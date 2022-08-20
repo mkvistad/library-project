@@ -14,5 +14,5 @@ fetch("/api/users")
     });
 
 function HelloWorld() {
-    return <div>Hello, World!</div>;
+    return <div Class="HelloWorld">Burn everything to the ground!</div>;
 }

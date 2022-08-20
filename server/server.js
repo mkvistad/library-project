@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 const path = require("path");
+// const spicedPg = require("spiced-pg");
 
 const cookieSession = require("cookie-session");
 const { secret } = require("./secrets.json");
@@ -19,7 +20,7 @@ const {
 
 // ******* End variable list ******* //
 // ------------------------------------------------- //
-// *********  Start setup *********** //
+// *********  Start middleware setup *********** //
 
 app.use(compression());
 app.use(express.json());
@@ -37,17 +38,12 @@ app.use(
     })
 );
 
-// *********  End  setup *********** //
+// *********  End middleware setup *********** //
 // ------------------------------------------------- //
-// *********  Start middleware functions *********** //
+// *********  Start functions *********** //
 
-// Prompt from notes:
-// app.get("/user/id.json", function (req, res) {
-//     res.json({
-//         userId: req.session.userId,
-//     });
-// });
-app.get("/api/users", (request, response) => {
+/// Register User ///
+app.get("/api/users/me", (request, response) => {
     if (!request.session.user_id) {
         response.json(null);
         return;
@@ -59,6 +55,7 @@ app.get("/api/users", (request, response) => {
             response.json(user);
         });
 });
+
 app.post("/api/users", (request, response) => {
     console.log("post user", request.body);
     createUser(request.body).then((newUser) => {
@@ -66,8 +63,16 @@ app.post("/api/users", (request, response) => {
         request.session.user_id = newUser.id;
         response.json(newUser);
     });
+    .catch((error) => {
+        if(error.constraint === "email") {
+            response.status(400).json({error: "email not available"});
+            return;
+        }
+        response.status(500).json({error:"POST api/users catch error"})
+    });
 });
 
+/// Login ///
 app.post("/api/login", (request, response) => {
     console.log("POST /api/login", request.body);
     login(request.body)
@@ -81,10 +86,41 @@ app.post("/api/login", (request, response) => {
         })
         .catch((error) => {
             console.log("POST /api/login", error);
-            response.status(500).json({ error: "something went wrong" });
+            response.status(500).json({ error: "api/login catch error" });
         });
     console.log("login", login);
 });
+
+/// Logout ///
+app.post("/logout", (request, response) => {
+    request.session = null;
+    response.json({ message: "successful logout" });
+});
+
+/// Reset Password 2 step process///
+// app.post("/password/reset/stepone", (request, response) => {
+//     resetCode(request.body)
+//         .then((foundUser) => {
+//             if (!foundUser) {
+//                 response
+//                     .status(401)
+//                     .json({ error: "reset request email not found" });
+//                 return;
+//             }
+//         })
+//         .catch((error) => {
+//             console.log("POST resetCode error", error);
+//             response
+//                 .status(500)
+//                 .json({ error: "failure in passoword reset request" });
+//         });
+// });
+
+// app.post("/password/reset/steptwo", (request, response) => {
+//     verifyCode();
+//     changePassword();
+//     getUserByEmail();
+// });
 
 //*********  Always in end position *********//
 app.get("*", function (req, res) {
