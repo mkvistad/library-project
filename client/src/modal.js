@@ -16,8 +16,8 @@ function Modal({ onClose, onUpload }) {
             });
     }
     return (
-        <div className="ModalDiv">
-            <div className="ModalDiv2">
+        <div>
+            <div className="Modal">
                 <form onSubmit={onSubmit}>
                     <input required type="file" name="file" accept="image/*" />
                     <button>Submit</button>

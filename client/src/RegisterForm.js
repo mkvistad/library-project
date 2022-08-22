@@ -28,7 +28,7 @@ export default class RegisterForm extends Component {
             .then((response) => response.json())
             .then((data) => {
                 if (data.error) {
-                    this.setState({ error: "error POSTing registration form" });
+                    this.setState({ error: "Error registering" });
                     return;
                 } else {
                     window.location.href = "/";
@@ -63,8 +63,8 @@ export default class RegisterForm extends Component {
                         placeholder="Password"
                         required
                     />
-                    {/* example from Diego on Wednesday...unsure how to implement...{this.error && <p>{this.error}</p>} */}
-                    <button Class="button">
+                    {this.error && <p>{this.error}</p>}
+                    <button className="button">
                         Click Here To Submit Registration
                     </button>
                 </form>

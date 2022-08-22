@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 const path = require("path");
-// const spicedPg = require("spiced-pg");
 // const { Bucket, s3Upload } = require("./s3");
 // const { uploader } = require("./uploader");
 
@@ -11,18 +10,7 @@ const { secret } = require("./secrets.json");
 console.log(secret);
 
 //🚨 remember to connect //
-const {
-    createUser,
-    getUserById,
-    login,
-    // setProfilePic,
-    // resetCode,
-    // verifyCode,
-    // changePassword,
-    // createSignature,
-    // getSignatureByUserId,
-    // createUserProfile,
-} = require("./db");
+const { createUser, getUserById, login } = require("./db");
 
 // ******* End variable list ******* //
 // ------------------------------------------------- //
@@ -49,14 +37,13 @@ app.use(
 // *********  Start functions *********** //
 
 /// Register User ///
-app.get("/api/users", (request, response) => {
+app.get("/api/users/me", (request, response) => {
     if (!request.session.user_id) {
         response.json(null);
         return;
     }
-
-    getUserById(request.session.user_id).then((userId) =>
-        response.json(userId)
+    getUserById(request.session.user_id).then((userInfo) =>
+        response.json(userInfo)
     );
 });
 
@@ -101,6 +88,25 @@ app.post("/logout", (request, response) => {
     request.session = null;
     response.json({ message: "successful logout" });
 });
+
+/// Logged in ///
+
+// app.get(`/api/user/me/:id`, (request, response) => {
+//     const userId = request.session.user_id;
+//     const { id } = request.params;
+
+//     getUserById(id === "undefined" ? userId : id)
+//         .then((data) => {
+//             if (userId === id) {
+//                 return response.json({ ownId: true });
+//             }
+//             return response.json(data);
+//         })
+//         .catch((error) => {
+//             console.log("error sending user to client: ", error);
+//             return response.json({ noId: true });
+//         });
+// });
 
 /// Profile Picture ///
 // app.post(
@@ -164,124 +170,3 @@ app.listen(process.env.PORT || 3001, function () {
 //npm run dev:client
 //npm run dev:server
 //psql -d social-network
-
-// app.get("/", (request, response) => {
-//     console.log("no user id", request.session.user_id);
-//     if (!request.session.user_id) {
-//         response.redirect("/register");
-//         return;
-//     }
-//     response.render("homepage");
-// });
-
-// app.post("/", (request, response) => {
-//     if (!request.session.user_id) {
-//         response.redirect("/register");
-//         return;
-//     }
-//     const { signature } = request.body;
-//     console.log("SIGNATURE*****", signature);
-//     console.log("POST /", request.body);
-//     createSignature({ user_id: request.session.user_id, signature }).then(
-//         (result) => {
-//             request.session.signature_id = result.id;
-
-//             console.log("result", result);
-//             response.redirect("/thank-you");
-//         }
-//     );
-// });
-
-// app.get("/register", (request, response) => {
-//     response.render("register");
-// });
-
-// app.post("/register", (request, response) => {
-//     console.log("POST /", request.body);
-
-//     const { first_name, last_name, email, password } = request.body;
-
-//     createUser(first_name, last_name, email, password)
-//         .then((result) => {
-//             console.log("result", result);
-//             request.session.user_id = result.id;
-//             console.log(request.session.user_id);
-//             response.redirect("/profile");
-//         })
-//         .catch((error) => {
-//             console.log("error creating user profile", error.constraint);
-//             if (error.constraint === "users_email_key") {
-//                 response.status(400).render("register", {
-//                     error: "email taken",
-//                 });
-//                 return;
-//             }
-//             response.status(500).render("register", {
-//                 error: "error registering profile",
-//             });
-//         });
-// });
-
-// app.get("/login", (request, response) => {
-//     if (request.session.user_id) {
-//         response.redirect("/");
-//         return;
-//     }
-//     response.render("login");
-// });
-
-// app.post("/login", (request, response) => {
-//     console.log("POST /login", request.body);
-//     login(request.body)
-//         .then((foundUser) => {
-//             if (!foundUser) {
-//                 response.render("login", { error: "wrong login" });
-//                 return;
-//             }
-//             request.session.user_id = foundUser.id;
-//             response.redirect("/");
-//         })
-//         .catch((error) => {
-//             console.log("error logging in", error);
-//             response.status(500).render("register", {
-//                 error: "error",
-//             });
-//         });
-//     // console.log(getUserByEmail);
-// });
-
-// app.get("/profile", (request, response) => {
-//     if (!request.session.user_id) {
-//         response.redirect("/login");
-//         return;
-//     }
-//     response.render("profile");
-// });
-
-// app.post("/profile", (request, response) => {
-//     if (!request.session.user_id) {
-//         response.redirect("/login");
-//         return;
-//     }
-//     request.body.user_id = request.session.user_id;
-//     createUserProfile(request.body)
-//         .then(response.redirect("/"))
-//         .catch((error) => {
-//             console.log(error);
-//             response.render("profile", {
-//                 errorMessage: "Information is incorrect",
-//             });
-//         });
-// });
-
-// app.get("/thank-you", (request, response) => {
-//     if (!request.session.user_id) {
-//         response.redirect("/register");
-//         return;
-//     }
-//     const user_id = request.session.user_id;
-//     getSignatureByUserId(user_id).then((signature) => {
-//         response.render("thank-you", { signature });
-//     });
-//     return;
-// });

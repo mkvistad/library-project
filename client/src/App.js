@@ -8,32 +8,38 @@ export default class App extends Component {
             user: {},
             showModal: false,
         };
-        this.onButtonClick = this.onButtonClick.bind(this);
-        this.closeModal = this.closeModal.bind(this);
-        this.uploadPic = this.uploadPic.bind(this);
+        // this.onButtonClick = this.onButtonClick.bind(this);
+        // this.closeModal = this.closeModal.bind(this);
+        // this.uploadPic = this.uploadPic.bind(this);
     }
-    onButtonClick() {
-        this.setState({
-            showModal: true,
-        });
-    }
-    uploadPic(profile_pic_url) {
-        console.log(profile_pic_url);
-    } //then do something...??? Display?
 
-    //Do I need to add close feature?...//
+    componentDidMount() {
+        console.log("component mounted. yay!");
+        fetch(`/api/users/me/${this.state.id}`)
+            .then((data) => console.log("this is the data ====>", data))
+            // .then((data) => {
+            //     console.log("mounted data: ", data);
+            // })
+            .catch((error) => {
+                console.log("error in mounted: ", error);
+            });
+    }
+
+    // onButtonClick() {
+    //     this.setState({
+    //         showModal: true,
+    //     });
+    // }
+
+    // uploadPic(profile_pic_url) {
+    //     console.log(profile_pic_url);
+    // } //then do something...??? Display?
+
     // closeModal() {
     //     this.setState({
     //         showModal: false,
     //     });
     // }
-
-    //attempting async code....and failing...//
-    async mountComponent() {
-        const response = await fetch("/api/users/me");
-        const data = await response.json();
-        this.setState({ user: data });
-    }
 
     render() {
         return (
