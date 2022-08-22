@@ -5,7 +5,7 @@ import Login from "./login";
 export default function Welcome() {
     return (
         <div className="welcome">
-            <h1 class="welcome">Welcome to the social network!</h1>
+            <h1>Welcome to the social network!</h1>
             <img src="/logo.jpg" />
             <BrowserRouter>
                 <div>

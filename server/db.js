@@ -56,15 +56,16 @@ function login({ email, password }) {
 }
 
 /// Profile Picture ///
-async function setProfilePic({ user_id, profile_pic_url }) {
-    const result = await db
+function setProfilePic({ user_id, profile_pic_url }) {
+    return db
         .query(
             `
-UPDATE users 
-SET password_hash = $1
+UPDATE users
+SET profile_pic_url = $2
+WHERE users.id = $1
 RETURNING *
 `,
-            [password_hash]
+            [user_id, profile_pic_url]
         )
         .then((result) => result.rows[0]);
 }

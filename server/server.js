@@ -3,6 +3,8 @@ const app = express();
 const compression = require("compression");
 const path = require("path");
 // const spicedPg = require("spiced-pg");
+// const { Bucket, s3Upload } = require("./s3");
+// const { uploader } = require("./uploader");
 
 const cookieSession = require("cookie-session");
 const { secret } = require("./secrets.json");
@@ -13,7 +15,7 @@ const {
     createUser,
     getUserById,
     login,
-    getProfilePic,
+    // setProfilePic,
     // resetCode,
     // verifyCode,
     // changePassword,
@@ -47,17 +49,15 @@ app.use(
 // *********  Start functions *********** //
 
 /// Register User ///
-app.get("/api/users/me", (request, response) => {
+app.get("/api/users", (request, response) => {
     if (!request.session.user_id) {
         response.json(null);
         return;
     }
 
-    getUserById()
-        .then(request.session.user_id)
-        .then((user) => {
-            response.json(user);
-        });
+    getUserById(request.session.user_id).then((userId) =>
+        response.json(userId)
+    );
 });
 
 app.post("/api/users", (request, response) => {
@@ -103,27 +103,28 @@ app.post("/logout", (request, response) => {
 });
 
 /// Profile Picture ///
-app.post(
-    "api/users/profile",
-    uploader.single("file"),
-    s3upload,
-    (request, response) => {
-        const url = `https://s3.amazonaws.com/${Bucket}/${request.file.filename}`;
-        console.log("POST /upload", url);
+// app.post(
+//     "/api/users/profile",
+//     uploader.single("file"),
+//     s3Upload,
+//     (request, response) => {
+//         const url = `https://s3.amazonaws.com/${Bucket}/${request.file.filename}`;
+//         console.log("POST /upload", url);
+//         console.log("POST /upload", url);
 
-        updateProfilePic({
-            user_id: request.session.user_id,
-            profile_pic_url: url,
-        })
-            .then((user) => {
-                response.json(user);
-            })
-            .catch((error) => {
-                console.log("POST upload pic catch", error);
-                response.status(500).json({ message: "unable to upload pic" });
-            });
-    }
-);
+//         setProfilePic({
+//             user_id: request.session.user_id,
+//             profile_pic_url: url,
+//         })
+//             .then((user) => {
+//                 response.json(user);
+//             })
+//             .catch((error) => {
+//                 console.log("POST upload pic catch", error);
+//                 response.status(500).json({ message: "unable to upload pic" });
+//             });
+//     }
+// );
 
 /// NEED HELP ///
 /// Reset Password 2 step process///
