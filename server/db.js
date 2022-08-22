@@ -55,6 +55,20 @@ function login({ email, password }) {
     });
 }
 
+/// Profile Picture ///
+async function setProfilePic({ user_id, profile_pic_url }) {
+    const result = await db
+        .query(
+            `
+UPDATE users 
+SET password_hash = $1
+RETURNING *
+`,
+            [password_hash]
+        )
+        .then((result) => result.rows[0]);
+}
+
 /// Reset Password ///
 // const cryptoRandomString = require("crypto-random-string");
 // const secretCode = cryptoRandomString({
@@ -100,6 +114,10 @@ module.exports = {
     createUser,
     getUserById,
     login,
+    setProfilePic,
+    // resetCode,
+    // verifyCode,
+    // changePassword,
     // createSignature,
     // getSignatureByUserId,
     // createUserProfile,

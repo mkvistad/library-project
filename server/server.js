@@ -13,6 +13,10 @@ const {
     createUser,
     getUserById,
     login,
+    getProfilePic,
+    // resetCode,
+    // verifyCode,
+    // changePassword,
     // createSignature,
     // getSignatureByUserId,
     // createUserProfile,
@@ -58,18 +62,19 @@ app.get("/api/users/me", (request, response) => {
 
 app.post("/api/users", (request, response) => {
     console.log("post user", request.body);
-    createUser(request.body).then((newUser) => {
-        console.log("newUser setup working", newUser);
-        request.session.user_id = newUser.id;
-        response.json(newUser);
-    });
-    .catch((error) => {
-        if(error.constraint === "email") {
-            response.status(400).json({error: "email not available"});
-            return;
-        }
-        response.status(500).json({error:"POST api/users catch error"})
-    });
+    createUser(request.body)
+        .then((newUser) => {
+            console.log("newUser setup working", newUser);
+            request.session.user_id = newUser.id;
+            response.json(newUser);
+        })
+        .catch((error) => {
+            if (error.constraint === "email") {
+                response.status(400).json({ error: "email not available" });
+                return;
+            }
+            response.status(500).json({ error: "POST api/users catch error" });
+        });
 });
 
 /// Login ///
@@ -97,6 +102,30 @@ app.post("/logout", (request, response) => {
     response.json({ message: "successful logout" });
 });
 
+/// Profile Picture ///
+app.post(
+    "api/users/profile",
+    uploader.single("file"),
+    s3upload,
+    (request, response) => {
+        const url = `https://s3.amazonaws.com/${Bucket}/${request.file.filename}`;
+        console.log("POST /upload", url);
+
+        updateProfilePic({
+            user_id: request.session.user_id,
+            profile_pic_url: url,
+        })
+            .then((user) => {
+                response.json(user);
+            })
+            .catch((error) => {
+                console.log("POST upload pic catch", error);
+                response.status(500).json({ message: "unable to upload pic" });
+            });
+    }
+);
+
+/// NEED HELP ///
 /// Reset Password 2 step process///
 // app.post("/password/reset/stepone", (request, response) => {
 //     resetCode(request.body)
