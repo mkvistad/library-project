@@ -70,6 +70,45 @@ RETURNING *
         .then((result) => result.rows[0]);
 }
 
+/// Update Bio ///
+function updateBio({ id, bio }) {
+    console.log("id", id);
+    console.log("bio", bio);
+    return db
+        .query(
+            `UPDATE users
+    SET bio = $2
+    WHERE id = $1
+    RETURNING *`,
+            [id, bio]
+        )
+        .then((result) => result.rows[0]);
+}
+
+/*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
+module.exports = {
+    createUser,
+    getUserById,
+    login,
+    setProfilePic,
+    updateBio,
+};
+
+// psql -d social-network -f setup.sql
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 /// Reset Password ///
 // const cryptoRandomString = require("crypto-random-string");
 // const secretCode = cryptoRandomString({
@@ -109,13 +148,3 @@ RETURNING *
 //             .then((result) => result.rows[0]);
 //     });
 // }
-
-/*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
-module.exports = {
-    createUser,
-    getUserById,
-    login,
-    setProfilePic,
-};
-
-// psql -d social-network -f setup.sql

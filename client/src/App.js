@@ -10,6 +10,7 @@ export default class App extends Component {
         this.onButtonClick = this.onButtonClick.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.uploadPic = this.uploadPic.bind(this);
+        this.setBio = this.setBio.bind(this);
     }
 
     componentDidMount() {
@@ -18,8 +19,8 @@ export default class App extends Component {
             .then((result) => result.json())
             .then((data) => {
                 console.log("this is the data output", data);
-                const { first_name, profile_pic_url } = data;
-                this.setState({ first_name, profile_pic_url });
+                const { first_name, profile_pic_url, bio } = data;
+                this.setState({ first_name, profile_pic_url, bio });
             })
             .catch((error) => {
                 console.log("error in mounted: ", error);
@@ -45,6 +46,12 @@ export default class App extends Component {
         });
     }
 
+    setBio(newBio) {
+        this.setState({
+            bio: newBio,
+        });
+    }
+
     render() {
         return (
             <Profile
@@ -54,6 +61,8 @@ export default class App extends Component {
                 showModal={this.state.showModal}
                 uploadPic={this.uploadPic}
                 closeModal={this.closeModal}
+                bio={this.state.bio}
+                setBio={this.setBio}
             />
         );
     }

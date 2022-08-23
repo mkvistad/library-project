@@ -10,7 +10,13 @@ const { secret } = require("./secrets.json");
 console.log(secret);
 
 //🚨 remember to connect //
-const { createUser, getUserById, login, setProfilePic } = require("./db");
+const {
+    createUser,
+    getUserById,
+    login,
+    setProfilePic,
+    updateBio,
+} = require("./db");
 
 // ******* End variable list ******* //
 // ------------------------------------------------- //
@@ -132,7 +138,45 @@ app.post(
     }
 );
 
-/// NEED HELP ///
+/// Update Bio ///
+app.post("/api/bio", (request, response) => {
+    console.log("POST /api/bio", request.body);
+    const userID = request.session.user_id;
+    updateBio({ id: userID, bio: request.body.bio })
+        .then((user) => {
+            console.log("user in bio", user);
+            response.json(user.bio);
+        })
+        .catch((error) => {
+            console.log("error POSTing updateBio", error);
+            response.statusCode(500).json({ message: "unable to update bio" });
+        });
+});
+
+//*********  Always in end position *********//
+app.get("*", function (req, res) {
+    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+});
+
+app.listen(process.env.PORT || 3001, function () {
+    console.log("I'm listening.");
+});
+
+//npm run dev:client
+//npm run dev:server
+//psql -d social-network
+
+//
+//
+//
+///
+//
+///
+//
+//
+//
+
+/// NEED HELP To set up the reset password funciton///
 /// Reset Password 2 step process///
 // app.post("/password/reset/stepone", (request, response) => {
 //     resetCode(request.body)
@@ -157,16 +201,3 @@ app.post(
 //     changePassword();
 //     getUserByEmail();
 // });
-
-//*********  Always in end position *********//
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
-});
-
-app.listen(process.env.PORT || 3001, function () {
-    console.log("I'm listening.");
-});
-
-//npm run dev:client
-//npm run dev:server
-//psql -d social-network

@@ -26,7 +26,7 @@ export default class LoginForm extends Component {
             .then((response) => response.json())
             .then((user) => {
                 if (user.error) {
-                    this.setState({ error: "error POSTing login form" });
+                    this.setState({ error: "Login failure" });
                     return;
                 } else {
                     window.location.href = "/";
@@ -50,7 +50,7 @@ export default class LoginForm extends Component {
                         required
                     />
 
-                    <button Class="button">Log in</button>
+                    <button className="button">Log in</button>
                 </form>
                 <Link to="/">Please Register</Link>
             </div>

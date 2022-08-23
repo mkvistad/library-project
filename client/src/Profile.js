@@ -1,5 +1,6 @@
 import PictureModal from "./PictureModal";
 import ProfilePicture from "./profilepicture.js";
+import BioEditor from "./BioEditor";
 
 export default function Profile({
     first_name,
@@ -8,17 +9,19 @@ export default function Profile({
     showModal,
     uploadPic,
     closeModal,
+    bio,
+    setBio,
 }) {
     return (
         <div className="app">
-            Hello World
-            <h2>
+            <h4>
                 Hello! Welcome to the social network, {first_name} {"."}
-            </h2>
+            </h4>
             <ProfilePicture
                 onButtonClick={onButtonClick}
                 profile_pic_url={profile_pic_url}
             />
+            <BioEditor bio={bio} setBio={setBio} />
             <button onClick={onButtonClick}>My Picture</button>
             {showModal && (
                 <PictureModal uploadPic={uploadPic} closeModal={closeModal} />
