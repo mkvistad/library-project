@@ -2,15 +2,15 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 const path = require("path");
-// const { Bucket, s3Upload } = require("./s3");
-// const { uploader } = require("./uploader");
+const { Bucket, s3Upload } = require("./s3");
+const { uploader } = require("./uploader");
 
 const cookieSession = require("cookie-session");
 const { secret } = require("./secrets.json");
 console.log(secret);
 
 //🚨 remember to connect //
-const { createUser, getUserById, login } = require("./db");
+const { createUser, getUserById, login, setProfilePic } = require("./db");
 
 // ******* End variable list ******* //
 // ------------------------------------------------- //
@@ -109,28 +109,28 @@ app.post("/logout", (request, response) => {
 // });
 
 /// Profile Picture ///
-// app.post(
-//     "/api/users/profile",
-//     uploader.single("file"),
-//     s3Upload,
-//     (request, response) => {
-//         const url = `https://s3.amazonaws.com/${Bucket}/${request.file.filename}`;
-//         console.log("POST /upload", url);
-//         console.log("POST /upload", url);
+app.post(
+    "/api/users/profile",
+    uploader.single("file"),
+    s3Upload,
+    (request, response) => {
+        const url = `https://s3.amazonaws.com/${Bucket}/${request.file.filename}`;
+        console.log("POST /upload", url);
+        console.log("POST /upload", url);
 
-//         setProfilePic({
-//             user_id: request.session.user_id,
-//             profile_pic_url: url,
-//         })
-//             .then((user) => {
-//                 response.json(user);
-//             })
-//             .catch((error) => {
-//                 console.log("POST upload pic catch", error);
-//                 response.status(500).json({ message: "unable to upload pic" });
-//             });
-//     }
-// );
+        setProfilePic({
+            user_id: request.session.user_id,
+            profile_pic_url: url,
+        })
+            .then((user) => {
+                response.json(user);
+            })
+            .catch((error) => {
+                console.log("POST upload pic catch", error);
+                response.status(500).json({ message: "unable to upload pic" });
+            });
+    }
+);
 
 /// NEED HELP ///
 /// Reset Password 2 step process///

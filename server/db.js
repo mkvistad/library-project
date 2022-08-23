@@ -43,7 +43,7 @@ function login({ email, password }) {
             console.log("incorrect email");
             return null;
         }
-        console.log("user email not found");
+        console.log("user email found");
         return bcrypt.compare(password, user.password_hash).then((match) => {
             if (match) {
                 console.log("password matches user");

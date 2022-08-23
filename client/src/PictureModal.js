@@ -1,4 +1,6 @@
-function Modal({ onClose, onUpload }) {
+// import ProfilePicture from "./profilepicture";
+
+function PictureModal({ closeModal, uploadPic }) {
     function onSubmit(event) {
         event.preventDefault();
 
@@ -9,25 +11,27 @@ function Modal({ onClose, onUpload }) {
             .then((response) => response.json())
             .then((dataNewImage) => {
                 if (dataNewImage.error) {
-                    alert("Error POSTing profile pic");
+                    alert("Error: unable to upload");
                     return;
                 }
-                onUpload(dataNewImage.profile_pic_url);
+                uploadPic(dataNewImage.profile_pic_url);
+                console.log("dataNewImage", dataNewImage);
             });
     }
     return (
         <div>
             <div className="Modal">
                 <form onSubmit={onSubmit}>
-                    <input required type="file" name="file" accept="image/*" />
-                    <button>Submit</button>
+                    <input name="file" type="file" accept="image/*" required />
+
+                    <button>Upload image</button>
                 </form>
                 <p>
-                    <button onClick={onClose}>Close</button>
+                    <button onClick={closeModal}>Close</button>
                 </p>
             </div>
         </div>
     );
 }
 
-export default Modal;
+export default PictureModal;
