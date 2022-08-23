@@ -17,8 +17,9 @@ export default class BioEditor extends Component {
         console.log("event", event.target.value);
     }
 
-    updateBio() {
+    updateBio(e) {
         console.log("This is working", this.state.userBioEdit);
+        e.preventDefault();
         fetch("/api/bio", {
             method: "POST",
             body: JSON.stringify({
