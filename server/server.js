@@ -163,6 +163,7 @@ app.get("/api/users/recent", async (request, response) => {
 });
 
 app.get("/api/users/search", async (request, response) => {
+    console.log("log from server.js, GET /api/users/search", request.query);
     const searchResults = await searchUsers(request.query.q);
     response.json(searchResults);
 });

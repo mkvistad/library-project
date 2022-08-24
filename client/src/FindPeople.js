@@ -30,23 +30,23 @@ export default function FindPeople() {
         setSearchTerm(event.target.value);
     }
 
-    function findUsers(props) {
-    const users = props.users;
-    {
-        users.map((user)=> (
-           <ul key={user.id}>
-                        <img
-                            className="profile-picture"
-                            src={profile_pic_url || "/profilepic.jpeg"}
-                            alt="user profile picture"
-                        />
-                        <NavLink to={"/users/" + user.id}>
-                            {user.first_name} {user.last_name}
-                        </NavLink>
-                    </ul>
-        ));
+    function FindUsers(props) {
+        const users = props.users;
+        {
+            return users.map((user) => (
+                <ul key={user.id}>
+                    <img
+                        className="profile-picture"
+                        src={user.profile_pic_url || "/profilepic.jpeg"}
+                        alt="user profile picture"
+                    />
+                    <NavLink to={"/users/" + user.id}>
+                        {user.first_name} {user.last_name}
+                    </NavLink>
+                </ul>
+            ));
+        }
     }
-}
 
     return (
         <section className="find-people">
@@ -57,7 +57,7 @@ export default function FindPeople() {
                     <ul key={user.id}>
                         <img
                             className="profile-picture"
-                            src={profile_pic_url || "/profilepic.jpeg"}
+                            src={user.profile_pic_url || "/profilepic.jpeg"}
                             alt="user profile picture"
                         />
                         <NavLink to={"/users/" + user.id}>
@@ -75,10 +75,8 @@ export default function FindPeople() {
                         placeholder="Search for users..."
                     />
                 </p>
-                <findUsers users={searchResults}
+                <FindUsers users={searchResults} />
             </section>
         </section>
     );
 }
-
-
