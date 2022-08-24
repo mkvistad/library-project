@@ -85,6 +85,30 @@ function updateBio({ id, bio }) {
         .then((result) => result.rows[0]);
 }
 
+/// Find People ///
+function recentUsers(limit) {
+    return db
+        .query(
+            `SELECT * FROM users
+        ORDER BY id DESC
+        LIMIT $1`,
+            [limit]
+        )
+        .then((result) => result.rows);
+}
+
+function searchUsers(find) {
+    return db
+        .query(
+            `SELECT * FROM users
+            WHERE first_name ILIKE $1
+            OR last_name ILIKE $1
+            ORDER BY first_name ASC`,
+            [find + "%"]
+        )
+        .then((result) => result.rows);
+}
+
 /*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
 module.exports = {
     createUser,
@@ -92,6 +116,8 @@ module.exports = {
     login,
     setProfilePic,
     updateBio,
+    recentUsers,
+    searchUsers,
 };
 
 // psql -d social-network -f setup.sql

@@ -16,6 +16,8 @@ const {
     login,
     setProfilePic,
     updateBio,
+    recentUsers,
+    searchUsers,
 } = require("./db");
 
 // ******* End variable list ******* //
@@ -151,6 +153,18 @@ app.post("/api/bio", (request, response) => {
             console.log("error POSTing updateBio", error);
             response.statusCode(500).json({ message: "unable to update bio" });
         });
+});
+
+/// Find People ///
+app.get("/api/users/recent", async (request, response) => {
+    const limit = 3;
+    const searchResults = await recentUsers(limit);
+    response.json(searchResults);
+});
+
+app.get("/api/users/search", async (request, response) => {
+    const searchResults = await searchUsers(request.query.q);
+    response.json(searchResults);
 });
 
 //*********  Always in end position *********//

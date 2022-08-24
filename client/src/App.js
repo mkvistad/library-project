@@ -1,5 +1,7 @@
 import { Component } from "react";
+import { BrowserRouter, Route, NavLink } from "react-router-dom";
 import Profile from "./Profile";
+import FindPeople from "./FindPeople";
 
 export default class App extends Component {
     constructor() {
@@ -54,16 +56,35 @@ export default class App extends Component {
 
     render() {
         return (
-            <Profile
-                first_name={this.state.first_name}
-                onButtonClick={this.onButtonClick}
-                profile_pic_url={this.state.profile_pic_url}
-                showModal={this.state.showModal}
-                uploadPic={this.uploadPic}
-                closeModal={this.closeModal}
-                bio={this.state.bio}
-                setBio={this.setBio}
-            />
+            <BrowserRouter>
+                <section className="appmain">
+                    <img className="logo" src="/logo.jpg" />
+                    <header>
+                        <nav className="home">
+                            <NavLink to="/">Home</NavLink>
+                            <NavLink to="/people">Find People</NavLink>
+                        </nav>
+                    </header>
+                    <section className="container">
+                        <Route path="/" exact>
+                            <Profile
+                                first_name={this.state.first_name}
+                                onButtonClick={this.onButtonClick}
+                                profile_pic_url={this.state.profile_pic_url}
+                                showModal={this.state.showModal}
+                                uploadPic={this.uploadPic}
+                                closeModal={this.closeModal}
+                                bio={this.state.bio}
+                                setBio={this.setBio}
+                            />
+                        </Route>
+                        <Route path="/people">
+                            <FindPeople />
+                        </Route>
+                    </section>
+                    <footer>...</footer>
+                </section>
+            </BrowserRouter>
         );
     }
 }

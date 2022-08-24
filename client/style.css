@@ -9,6 +9,20 @@ body {
     font-weight: lighter;
 }
 
+.welcome .logo {
+position: fixed;
+top: 200px;
+left: 10px;
+width: 300px;
+justify-items: center;
+}
+
+.appmain .logo {
+    position: fixed;
+        top: 10px;
+        left: 10px;
+        width: 50px;
+}
 .button {
     box-shadow: inset;
     border-radius: 10;
@@ -25,7 +39,7 @@ font-family: Arial, Helvetica, sans-serif;
     margin-left: 120px;
 }
 
-.app {
+.app .h4 {
     color: black;
 }
 
