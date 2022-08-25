@@ -18,6 +18,7 @@ const {
     updateBio,
     recentUsers,
     searchUsers,
+    getFriendStatus,
 } = require("./db");
 
 // ******* End variable list ******* //
@@ -46,13 +47,14 @@ app.use(
 
 /// Register User ///
 app.get("/api/users/me", (request, response) => {
+    // console.log("is this working?", request.session.user_id);
     if (!request.session.user_id) {
         response.json(null);
         return;
     }
-    getUserById(request.session.user_id).then((userInfo) =>
-        response.json(userInfo)
-    );
+    getUserById(request.session.user_id)
+        .then((userInfo) => response.json(userInfo))
+        .catch((error) => console.log("error", error));
 });
 
 app.post("/api/users", (request, response) => {
@@ -175,9 +177,20 @@ app.get("/api/users/:user_id", (request, response) => {
 });
 
 /// Friendship Requests ///
-app.get("/api/friendship-status/:otheruserid", (request, response) => {
-    console.log("request.params.otheruserid: ", request.params.otheruserid);
-    response.json("Make Friend Request");
+app.get("/api/friendship-status/:otherUserId", (request, response) => {
+    console.log("request.params.otherUserId: ", request.params.otheruserid);
+    const otherUserId = request.params.otherUserId;
+    const loggedInId = request.session.user_id;
+    console.log("otherUserId", otherUserId);
+    console.log("loggedInId", loggedInId);
+    getFriendStatus(loggedInId, otherUserId)
+        .then((result) => {
+            console.log("result", result);
+            if (result.length === 0) {
+                response.json("Make Friend Request");
+            } 
+        })
+        .catch((error) => console.log("error", error));
     //Do DB query
     //look at results
     //and if else send back button make or cancel fnd req

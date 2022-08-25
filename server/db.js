@@ -115,6 +115,16 @@ function searchUsers(find) {
 }
 
 /// Friendship Requests ///
+function getFriendStatus(loggedInId, otherUserId) {
+    return db
+        .query(
+            `SELECT * FROM friendships
+  WHERE (recipient_id = $1 AND sender_id = $2)
+  OR (recipient_id = $2 AND sender_id = $1)`,
+            [loggedInId, otherUserId]
+        )
+        .then((result) => result.rows);
+}
 
 /*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
 module.exports = {
@@ -125,6 +135,7 @@ module.exports = {
     updateBio,
     recentUsers,
     searchUsers,
+    getFriendStatus,
 };
 
 // psql -d social-network -f setup.sql

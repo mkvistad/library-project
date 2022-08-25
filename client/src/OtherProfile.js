@@ -18,30 +18,29 @@ export default function OtherProfile() {
             });
     }, [user_id]);
 
-    otherUserId(() => {
-        fetch("/api/users/" + otherUserId)
-            .then((response) => response.json())
-            .then((data) => {
-                return data ? setUser(data) : history.push("/");
-            });
-    }, [otherUserId]);
+    // otherUserId(() => {
+    //     fetch("/api/users/" + otherUserId)
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             return data ? setUser(data) : history.push("/");
+    //         });
+    // }, [otherUserId]);
 
     if (!user) {
         return null;
     }
-}
 
-return (
-    <div className="profile">
-        <div className="profiledetails">
-            <ProfilePicture {...user} />
-            <h3>
-                {user.first_name} {user.last_name}
-            </h3>
-            <h2>Bio</h2>
-            <p className="bioOthers">{user.bio}</p>
-            <FriendshipButton otherUserId={otherUserId} />
+    return (
+        <div className="profile">
+            <div className="profiledetails">
+                <ProfilePicture {...user} />
+                <h3>
+                    {user.first_name} {user.last_name}
+                </h3>
+                <h2>Bio</h2>
+                <p className="bioOthers">{user.bio}</p>
+                <FriendshipButton otherUserId={user_id} />
+            </div>
         </div>
-    </div>
-);
-f;
+    );
+}
