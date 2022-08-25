@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
 import ProfilePicture from "./profilepicture";
+import FriendshipButton from "./FriendshipButton";
 
 export default function OtherProfile() {
     const { user_id } = useParams();
@@ -17,13 +18,30 @@ export default function OtherProfile() {
             });
     }, [user_id]);
 
-    return (
-        <div>
-            <ProfilePicture {...user} />
-            <p>
-                {user.first_name} {user.last_name}
-            </p>
-            <p>{user.bio}</p>
-        </div>
-    );
+    otherUserId(() => {
+        fetch("/api/users/" + otherUserId)
+            .then((response) => response.json())
+            .then((data) => {
+                return data ? setUser(data) : history.push("/");
+            });
+    }, [otherUserId]);
+
+    if (!user) {
+        return null;
+    }
 }
+
+return (
+    <div className="profile">
+        <div className="profiledetails">
+            <ProfilePicture {...user} />
+            <h3>
+                {user.first_name} {user.last_name}
+            </h3>
+            <h2>Bio</h2>
+            <p className="bioOthers">{user.bio}</p>
+            <FriendshipButton otherUserId={otherUserId} />
+        </div>
+    </div>
+);
+f;

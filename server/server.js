@@ -174,6 +174,15 @@ app.get("/api/users/:user_id", (request, response) => {
     });
 });
 
+/// Friendship Requests ///
+app.get("/api/friendship-status/:otheruserid", (request, response) => {
+    console.log("request.params.otheruserid: ", request.params.otheruserid);
+    response.json("Make Friend Request");
+    //Do DB query
+    //look at results
+    //and if else send back button make or cancel fnd req
+});
+
 //*********  Always in end position *********//
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));

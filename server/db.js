@@ -114,6 +114,8 @@ function searchUsers(find) {
         .then((result) => result.rows);
 }
 
+/// Friendship Requests ///
+
 /*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
 module.exports = {
     createUser,
