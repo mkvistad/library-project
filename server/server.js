@@ -186,14 +186,17 @@ app.get("/api/friendship-status/:otherUserId", (request, response) => {
     getFriendStatus(loggedInId, otherUserId)
         .then((result) => {
             console.log("result", result);
-            if (result.length === 0) {
-                response.json("Make Friend Request");
-            } 
+            if (!result) {
+                return response.json("Accept Friend Request");
+            } else if (result.accepted === true) {
+                return response.json("End Friendship");
+            } else if (result.accepted === false) {
+                return response.json("Cancel Friend Request");
+            } else if (!result.accepted) {
+                return response.json("Make Friend Request");
+            }
         })
         .catch((error) => console.log("error", error));
-    //Do DB query
-    //look at results
-    //and if else send back button make or cancel fnd req
 });
 
 //*********  Always in end position *********//

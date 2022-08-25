@@ -3,11 +3,12 @@ import { useState, useEffect } from "react";
 export default function FriendshipButton(props) {
     console.log("props", props);
     const [buttonText, setButtonText] = useState("default btn text");
-    // const otherUserId = 55;
+    const otherUserId = props.otherUserId;
+    console.log("Other user ID", otherUserId);
 
     useEffect(() => {
         console.log("friendship btn mounted!");
-        fetch("/api/friendship-status/" + props.otherUserId)
+        fetch("/api/friendship-status/" + otherUserId)
             .then((response) => response.json())
             .then((result) => {
                 console.log("result in useEffect: ", result);
@@ -18,15 +19,18 @@ export default function FriendshipButton(props) {
             });
     }, []);
 
-    // function handleClick() {
-    //     console.log("clicked on the button");
-    //2 options if else chain and based on text make post req to route
-    //     if (buttonText === "Make Friend Request") {
-    //         fetch("/api/add-friend", method: "POST", body: otherUserId )
-    //     } else if (buttonText === "Cancel Friend Request") {
-    //         //delete api or accept api
-    //     }
-    // }
+    function handleClick() {
+        console.log("clicked on the button");
+        if (buttonText === "Make Friend Request") {
+            setButtonText("Cancel Friend Request");
+        } else if (buttonText === "Cancel Friend Request") {
+            setButtonText("Send Friend Request");
+        } else if (buttonText === "End Friendship") {
+            setButtonText("Send Friend Request");
+        } else if (buttonText === "Accept Friend Request") {
+            setButtonText("End Friendship");
+        }
+    }
 
-    return <button>{buttonText}</button>;
+    return <button onClick={handleClick}>{buttonText}</button>;
 }

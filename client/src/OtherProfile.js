@@ -18,14 +18,6 @@ export default function OtherProfile() {
             });
     }, [user_id]);
 
-    // otherUserId(() => {
-    //     fetch("/api/users/" + otherUserId)
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             return data ? setUser(data) : history.push("/");
-    //         });
-    // }, [otherUserId]);
-
     if (!user) {
         return null;
     }
