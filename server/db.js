@@ -27,7 +27,12 @@ function createUser({ first_name, last_name, email, password }) {
 }
 function getUserById(id) {
     return db
-        .query(`SELECT * FROM users WHERE id=$1`, [id])
+        .query(
+            `SELECT users.first_name, users.last_name, users.email, users.profile_pic_url, users.bio
+            FROM users
+            WHERE users.id=$1`,
+            [id]
+        )
         .then((result) => result.rows[0]);
 }
 function getUserByEmail(email) {

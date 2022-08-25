@@ -13,15 +13,11 @@ export default function FindPeople() {
             .then((data) => setRecentUsers(data));
     }, []);
 
-    // this other useEffect is needed to react to the search term change:
     useEffect(() => {
-        // if the searchTerm is too short, exit the function!
         if (searchTerm.length < 1) {
             return;
         }
-        // make an ajax call to '/api/users/search?q=' + searchTerm
         fetch("/api/users/search?q=" + searchTerm)
-            // then update the search results state with the results
             .then((response) => response.json())
             .then((data) => setSearchResults(data));
     }, [searchTerm]);

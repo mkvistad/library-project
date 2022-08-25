@@ -2,6 +2,7 @@ import { Component } from "react";
 import { BrowserRouter, Route, NavLink } from "react-router-dom";
 import Profile from "./Profile";
 import FindPeople from "./FindPeople";
+import OtherProfile from "./OtherProfile";
 
 export default class App extends Component {
     constructor() {
@@ -78,11 +79,17 @@ export default class App extends Component {
                                 setBio={this.setBio}
                             />
                         </Route>
+                    </section>
+
+                    <section>
+                        <Route path="/users/:user_id">
+                            <OtherProfile />
+                        </Route>
                         <Route path="/people">
                             <FindPeople />
                         </Route>
                     </section>
-                    <footer>...</footer>
+                    <footer>Ⓒ Spiced Academy 2022</footer>
                 </section>
             </BrowserRouter>
         );

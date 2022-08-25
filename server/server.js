@@ -168,6 +168,12 @@ app.get("/api/users/search", async (request, response) => {
     response.json(searchResults);
 });
 
+app.get("/api/users/:user_id", (request, response) => {
+    getUserById(request.params.user_id).then((result) => {
+        response.json(result);
+    });
+});
+
 //*********  Always in end position *********//
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
