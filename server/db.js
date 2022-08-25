@@ -126,6 +126,20 @@ function getFriendStatus(loggedInId, otherUserId) {
         .then((result) => result.rows);
 }
 
+function makeFriendRequest(loggedInId, otherUserId) {
+    return db
+        .query(
+            `INSERT INTO friendships
+        (recipient_id, sender_id)
+        VALUES ($1, $2)
+        RETURNING *`,
+            [loggedInId, otherUserId]
+        )
+        .then((result) => result.rows);
+}
+
+function 
+
 /*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
 module.exports = {
     createUser,
@@ -136,6 +150,7 @@ module.exports = {
     recentUsers,
     searchUsers,
     getFriendStatus,
+    makeFriendRequest,
 };
 
 // psql -d social-network -f setup.sql

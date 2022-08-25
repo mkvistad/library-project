@@ -19,6 +19,7 @@ const {
     recentUsers,
     searchUsers,
     getFriendStatus,
+    makeFriendRequest,
 } = require("./db");
 
 // ******* End variable list ******* //
@@ -198,6 +199,35 @@ app.get("/api/friendship-status/:otherUserId", (request, response) => {
         })
         .catch((error) => console.log("error", error));
 });
+
+app.post("/api/make-request/:otherUserId", (request, response) => {
+    const otherUserId = request.params.otherUserId;
+    const loggedInId = request.session.user_id;
+    console.log("otherUserId", otherUserId);
+    console.log("loggedInId", loggedInId);
+    makeFriendRequest(loggedInId, otherUserId).then((results) => {
+        console.log("results POSTing make request", results);
+        response.json(results);
+    });
+});
+
+// app.post("/api/accept-request/:otherUserId", (request, response) => {
+//     console.log("something here");
+//     const otherUserId = request.params.otherUserId;
+//     const loggedInId = request.session.user_id;
+// });
+// app.post("/api/cancel-request/:otherUserId", (request, response) => {
+//     console.log("something here");
+//     const otherUserId = request.params.otherUserId;
+//     const loggedInId = request.session.user_id;
+// });
+// app.post("/api/unfriend/:otherUserId", (request, response) => {
+//     console.log("something here");
+//     const otherUserId = request.params.otherUserId;
+//     const loggedInId = request.session.user_id;
+// });
+
+//(NB: you might want to combine the cancel-request and unfriend routes) - this may lead to more logic happening client side.
 
 //*********  Always in end position *********//
 app.get("*", function (req, res) {

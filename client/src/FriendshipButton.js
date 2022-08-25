@@ -22,8 +22,18 @@ export default function FriendshipButton(props) {
     function handleClick() {
         console.log("clicked on the button");
         if (buttonText === "Make Friend Request") {
-            setButtonText("Cancel Friend Request");
-        } else if (buttonText === "Cancel Friend Request") {
+            fetch("/api/make-request/" + otherUserId, {
+                method: "POST",
+                body: JSON.stringify({
+                    buttonText: buttonText,
+                }),
+                headers: { "Content-Type": "application/json" },
+            }).then(() => setButtonText("Cancel Friend Request"));
+        } else if (
+            //Finish UPDATE, or DELETE query.//
+
+            buttonText === "Cancel Friend Request"
+        ) {
             setButtonText("Send Friend Request");
         } else if (buttonText === "End Friendship") {
             setButtonText("Send Friend Request");
