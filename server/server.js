@@ -22,7 +22,6 @@ const {
     makeFriendRequest,
     acceptFriendRequest,
     cancelFriendRequest,
-    endFriendRequest,
 } = require("./db");
 
 // ******* End variable list ******* //
@@ -130,7 +129,6 @@ app.post(
     (request, response) => {
         const url = `https://s3.amazonaws.com/${Bucket}/${request.file.filename}`;
         console.log("POST /upload", url);
-        console.log("POST /upload", url);
 
         setProfilePic({
             user_id: request.session.user_id,
@@ -169,7 +167,6 @@ app.get("/api/users/recent", async (request, response) => {
 });
 
 app.get("/api/users/search", async (request, response) => {
-    console.log("log from server.js, GET /api/users/search", request.query);
     const searchResults = await searchUsers(request.query.q);
     response.json(searchResults);
 });
@@ -182,22 +179,20 @@ app.get("/api/users/:user_id", (request, response) => {
 
 /// Friendship Requests ///
 app.get("/api/friendship-status/:otherUserId", (request, response) => {
-    console.log("request.params.otherUserId: ", request.params.otheruserid);
+    console.log("request.params.otherUserId: ", request.params.otherUserId);
     const otherUserId = request.params.otherUserId;
     const loggedInId = request.session.user_id;
-    console.log("otherUserId", otherUserId);
-    console.log("loggedInId", loggedInId);
     getFriendStatus(loggedInId, otherUserId)
         .then((result) => {
             console.log("result", result);
             if (!result) {
-                return response.json("Accept Friend Request");
-            } else if (result.accepted === true) {
-                return response.json("End Friendship");
-            } else if (result.accepted === false) {
-                return response.json("Cancel Friend Request");
+                response.json("Make Friend Request");
+            } else if (!result.accepted && otherUserId == result.recipient_id) {
+                response.json("Accept Friend Request");
             } else if (!result.accepted) {
-                return response.json("Make Friend Request");
+                response.json("Cancel Friend Request");
+            } else if (result.accepted) {
+                response.json("End Friendship");
             }
         })
         .catch((error) => console.log("error", error));
@@ -206,8 +201,6 @@ app.get("/api/friendship-status/:otherUserId", (request, response) => {
 app.post("/api/make-request/:otherUserId", (request, response) => {
     const otherUserId = request.params.otherUserId;
     const loggedInId = request.session.user_id;
-    console.log("otherUserId", otherUserId);
-    console.log("loggedInId", loggedInId);
     makeFriendRequest(loggedInId, otherUserId).then((results) => {
         console.log("results POSTing make request", results);
         response.json(results);
@@ -217,9 +210,7 @@ app.post("/api/make-request/:otherUserId", (request, response) => {
 app.post("/api/accept-request/:otherUserId", (request, response) => {
     const otherUserId = request.params.otherUserId;
     const loggedInId = request.session.user_id;
-    console.log("otherUserId", otherUserId);
-    console.log("loggedInId", loggedInId);
-    acceptFriendRequest(loggedInId, otherUserId).then((results) => {
+    acceptFriendRequest(otherUserId, loggedInId).then((results) => {
         console.log("results POSTing accept request", results);
         response.json(results);
     });
@@ -228,21 +219,8 @@ app.post("/api/accept-request/:otherUserId", (request, response) => {
 app.post("/api/cancel-request/:otherUserId", (request, response) => {
     const otherUserId = request.params.otherUserId;
     const loggedInId = request.session.user_id;
-    console.log("otherUserId", otherUserId);
-    console.log("loggedInId", loggedInId);
     cancelFriendRequest(loggedInId, otherUserId).then((results) => {
         console.log("results POSTing cancel request", results);
-        response.json(results);
-    });
-});
-
-app.post("/api/unfriend/:otherUserId", (request, response) => {
-    const otherUserId = request.params.otherUserId;
-    const loggedInId = request.session.user_id;
-    console.log("otherUserId", otherUserId);
-    console.log("loggedInId", loggedInId);
-    endFriendRequest(loggedInId, otherUserId).then((results) => {
-        console.log("results POSTing unfriend request", results);
         response.json(results);
     });
 });

@@ -123,7 +123,13 @@ function getFriendStatus(loggedInId, otherUserId) {
   OR (recipient_id = $2 AND sender_id = $1)`,
             [loggedInId, otherUserId]
         )
-        .then((result) => result.rows);
+        .then((result) => {
+            // if (result.row.length < 1) {
+            //     return null;
+            // }
+            console.log("result in db.js", result);
+            return result.rows[0];
+        });
 }
 
 function makeFriendRequest(loggedInId, otherUserId) {
@@ -135,7 +141,7 @@ function makeFriendRequest(loggedInId, otherUserId) {
         RETURNING *`,
             [loggedInId, otherUserId]
         )
-        .then((result) => result.rows);
+        .then((result) => result.rows[0]);
 }
 
 function acceptFriendRequest(loggedInId, otherUserId) {
@@ -161,17 +167,6 @@ function cancelFriendRequest(loggedInId, otherUserId) {
         .then((result) => result.rows[0]);
 }
 
-function endFriendRequest(loggedInId, otherUserId) {
-    return db
-        .query(
-            `DELETE FROM friendships
-        WHERE (recipient_id=$1 AND sender_id=$2)
-        OR (sender_id=$2 AND recipient_id=$1)`,
-            [loggedInId, otherUserId]
-        )
-        .then((result) => result.rows[0]);
-}
-
 /*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
 module.exports = {
     createUser,
@@ -185,7 +180,6 @@ module.exports = {
     makeFriendRequest,
     acceptFriendRequest,
     cancelFriendRequest,
-    endFriendRequest,
 };
 
 // psql -d social-network -f setup.sql

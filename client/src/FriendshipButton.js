@@ -30,15 +30,24 @@ export default function FriendshipButton(props) {
                 headers: { "Content-Type": "application/json" },
             }).then(() => setButtonText("Cancel Friend Request"));
         } else if (
-            //Finish UPDATE, or DELETE query.//
-
-            buttonText === "Cancel Friend Request"
+            buttonText == "Cancel Friend Request" ||
+            buttonText == "End Friendship"
         ) {
-            setButtonText("Send Friend Request");
-        } else if (buttonText === "End Friendship") {
-            setButtonText("Send Friend Request");
+            fetch("/api/cancel-request/" + otherUserId, {
+                method: "POST",
+                body: JSON.stringify({
+                    buttonText: buttonText,
+                }),
+                headers: { "Content-Type": "application/json" },
+            }).then(() => setButtonText("Make Friend Request"));
         } else if (buttonText === "Accept Friend Request") {
-            setButtonText("End Friendship");
+            fetch("/api/accept-request/" + otherUserId, {
+                method: "POST",
+                body: JSON.stringify({
+                    buttonText: buttonText,
+                }),
+                headers: { "Content-Type": "application/json" },
+            }).then(() => setButtonText("End Friendship"));
         }
     }
 
