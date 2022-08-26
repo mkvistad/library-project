@@ -20,6 +20,9 @@ const {
     searchUsers,
     getFriendStatus,
     makeFriendRequest,
+    acceptFriendRequest,
+    cancelFriendRequest,
+    endFriendRequest,
 } = require("./db");
 
 // ******* End variable list ******* //
@@ -211,23 +214,38 @@ app.post("/api/make-request/:otherUserId", (request, response) => {
     });
 });
 
-// app.post("/api/accept-request/:otherUserId", (request, response) => {
-//     console.log("something here");
-//     const otherUserId = request.params.otherUserId;
-//     const loggedInId = request.session.user_id;
-// });
-// app.post("/api/cancel-request/:otherUserId", (request, response) => {
-//     console.log("something here");
-//     const otherUserId = request.params.otherUserId;
-//     const loggedInId = request.session.user_id;
-// });
-// app.post("/api/unfriend/:otherUserId", (request, response) => {
-//     console.log("something here");
-//     const otherUserId = request.params.otherUserId;
-//     const loggedInId = request.session.user_id;
-// });
+app.post("/api/accept-request/:otherUserId", (request, response) => {
+    const otherUserId = request.params.otherUserId;
+    const loggedInId = request.session.user_id;
+    console.log("otherUserId", otherUserId);
+    console.log("loggedInId", loggedInId);
+    acceptFriendRequest(loggedInId, otherUserId).then((results) => {
+        console.log("results POSTing accept request", results);
+        response.json(results);
+    });
+});
 
-//(NB: you might want to combine the cancel-request and unfriend routes) - this may lead to more logic happening client side.
+app.post("/api/cancel-request/:otherUserId", (request, response) => {
+    const otherUserId = request.params.otherUserId;
+    const loggedInId = request.session.user_id;
+    console.log("otherUserId", otherUserId);
+    console.log("loggedInId", loggedInId);
+    cancelFriendRequest(loggedInId, otherUserId).then((results) => {
+        console.log("results POSTing cancel request", results);
+        response.json(results);
+    });
+});
+
+app.post("/api/unfriend/:otherUserId", (request, response) => {
+    const otherUserId = request.params.otherUserId;
+    const loggedInId = request.session.user_id;
+    console.log("otherUserId", otherUserId);
+    console.log("loggedInId", loggedInId);
+    endFriendRequest(loggedInId, otherUserId).then((results) => {
+        console.log("results POSTing unfriend request", results);
+        response.json(results);
+    });
+});
 
 //*********  Always in end position *********//
 app.get("*", function (req, res) {
