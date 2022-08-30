@@ -3,6 +3,7 @@ import { BrowserRouter, Route, NavLink } from "react-router-dom";
 import Profile from "./Profile";
 import FindPeople from "./FindPeople";
 import OtherProfile from "./OtherProfile";
+import Friends from "./Friends";
 
 export default class App extends Component {
     constructor() {
@@ -78,6 +79,9 @@ export default class App extends Component {
                                 bio={this.state.bio}
                                 setBio={this.setBio}
                             />
+                        </Route>
+                        <Route path="/friends">
+                            <Friends />
                         </Route>
                     </section>
 

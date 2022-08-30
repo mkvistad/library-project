@@ -2,12 +2,33 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 const path = require("path");
+const multer = require("multer");
+const uidSafe = require("uid-safe");
+
 const { Bucket, s3Upload } = require("./s3");
-const { uploader } = require("./uploader");
+// const { uploader } = require("./uploader");
 
 const cookieSession = require("cookie-session");
 const { secret } = require("./secrets.json");
 console.log(secret);
+
+const diskStorage = multer.diskStorage({
+    destination: function (request, file, callback) {
+        callback(null, path.join(__dirname, "uploads"));
+    },
+    filename: function (request, file, callback) {
+        uidSafe(24).then(function (uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    },
+});
+
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152,
+    },
+});
 
 //🚨 remember to connect //
 const {
@@ -22,6 +43,7 @@ const {
     makeFriendRequest,
     acceptFriendRequest,
     cancelFriendRequest,
+    viewFriendships,
 } = require("./db");
 
 // ******* End variable list ******* //
@@ -210,7 +232,7 @@ app.post("/api/make-request/:otherUserId", (request, response) => {
 app.post("/api/accept-request/:otherUserId", (request, response) => {
     const otherUserId = request.params.otherUserId;
     const loggedInId = request.session.user_id;
-    acceptFriendRequest(otherUserId, loggedInId).then((results) => {
+    acceptFriendRequest(loggedInId, otherUserId).then((results) => {
         console.log("results POSTing accept request", results);
         response.json(results);
     });
@@ -222,6 +244,13 @@ app.post("/api/cancel-request/:otherUserId", (request, response) => {
     cancelFriendRequest(loggedInId, otherUserId).then((results) => {
         console.log("results POSTing cancel request", results);
         response.json(results);
+    });
+});
+
+/// View Friendship Status ///
+app.get("/api/friendships", (request, response) => {
+    viewFriendships(request.session.user_id).then((result) => {
+        response.json(result);
     });
 });
 

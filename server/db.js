@@ -167,6 +167,21 @@ function cancelFriendRequest(loggedInId, otherUserId) {
         .then((result) => result.rows[0]);
 }
 
+/// View Friendship Status ///
+function viewFriendships(user_id) {
+    return db
+        .query(
+            `SELECT friendships.accepted, friendships.sender_id, friendships.recipient_id,
+             users.first_name, users.last_name, users.profile_pic_url, users.id
+             FROM friendships
+             JOIN users
+             ON (users.id = friendships.sender_id AND friendships.recipient_id = $1)
+             OR (users.id = friendships.recipient_id AND friendships.sender_id = $1 AND friendships.accepted=true)`,
+            [user_id]
+        )
+        .then((result) => result.rows);
+}
+
 /*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
 module.exports = {
     createUser,
@@ -180,6 +195,7 @@ module.exports = {
     makeFriendRequest,
     acceptFriendRequest,
     cancelFriendRequest,
+    viewFriendships,
 };
 
 // psql -d social-network -f setup.sql
