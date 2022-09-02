@@ -4,6 +4,7 @@ import Profile from "./Profile";
 import FindPeople from "./FindPeople";
 import OtherProfile from "./OtherProfile";
 import Friends from "./Friends";
+import Chat from "./Chat";
 
 export default class App extends Component {
     constructor() {
@@ -18,11 +19,9 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        console.log("component mounted. yay!");
         fetch(`/api/users/me/`)
             .then((result) => result.json())
             .then((data) => {
-                console.log("this is the data output", data);
                 const { first_name, profile_pic_url, bio } = data;
                 this.setState({ first_name, profile_pic_url, bio });
             })
@@ -38,7 +37,6 @@ export default class App extends Component {
     }
 
     uploadPic(image) {
-        console.log(image);
         this.setState({
             user: { ...this.state.user, profile_pic_url: image },
         });
@@ -65,6 +63,7 @@ export default class App extends Component {
                         <nav className="home">
                             <NavLink to="/">Home</NavLink>
                             <NavLink to="/people">Find People</NavLink>
+                            <NavLink to="/chat">Chat</NavLink>
                         </nav>
                     </header>
                     <section className="container">
@@ -82,6 +81,9 @@ export default class App extends Component {
                         </Route>
                         <Route path="/friends">
                             <Friends />
+                        </Route>
+                        <Route path="/chat">
+                            <Chat />
                         </Route>
                     </section>
 

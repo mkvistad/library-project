@@ -6,11 +6,17 @@ const multer = require("multer");
 const uidSafe = require("uid-safe");
 
 const { Bucket, s3Upload } = require("./s3");
-// const { uploader } = require("./uploader");
+const { Server } = require("http");
 
-const cookieSession = require("cookie-session");
+const socketConnect = require("socket.io");
+const server = Server(app);
+
 const { secret } = require("./secrets.json");
-console.log(secret);
+const cookieSession = require("cookie-session");
+const cookieSessionMiddleware = cookieSession({
+    secret: secret,
+    maxAge: 1000 * 60 * 60 * 24 * 90,
+});
 
 const diskStorage = multer.diskStorage({
     destination: function (request, file, callback) {
@@ -37,6 +43,8 @@ const {
     login,
     setProfilePic,
     updateBio,
+    getMessages,
+    storeMessage,
     recentUsers,
     searchUsers,
     getFriendStatus,
@@ -47,8 +55,7 @@ const {
 } = require("./db");
 
 // ******* End variable list ******* //
-// ------------------------------------------------- //
-// *********  Start middleware setup *********** //
+//--------------------------------------------//
 
 app.use(compression());
 app.use(express.json());
@@ -58,16 +65,10 @@ app.use(
         extended: true,
     })
 );
-app.use(
-    cookieSession({
-        secret: secret,
-        maxAge: 1000 * 60 * 60 * 24 * 14,
-        sameSite: true,
-    })
-);
+app.use(cookieSessionMiddleware);
 
 // *********  End middleware setup *********** //
-// ------------------------------------------------- //
+//------------------------------------------ //
 // *********  Start functions *********** //
 
 /// Register User ///
@@ -86,7 +87,6 @@ app.post("/api/users", (request, response) => {
     console.log("post user", request.body);
     createUser(request.body)
         .then((newUser) => {
-            console.log("newUser setup working", newUser);
             request.session.user_id = newUser.id;
             response.json(newUser);
         })
@@ -124,25 +124,6 @@ app.post("/logout", (request, response) => {
     response.json({ message: "successful logout" });
 });
 
-/// Logged in ///
-
-// app.get(`/api/user/me/:id`, (request, response) => {
-//     const userId = request.session.user_id;
-//     const { id } = request.params;
-
-//     getUserById(id === "undefined" ? userId : id)
-//         .then((data) => {
-//             if (userId === id) {
-//                 return response.json({ ownId: true });
-//             }
-//             return response.json(data);
-//         })
-//         .catch((error) => {
-//             console.log("error sending user to client: ", error);
-//             return response.json({ noId: true });
-//         });
-// });
-
 /// Profile Picture ///
 app.post(
     "/api/users/profile",
@@ -179,6 +160,49 @@ app.post("/api/bio", (request, response) => {
             console.log("error POSTing updateBio", error);
             response.statusCode(500).json({ message: "unable to update bio" });
         });
+});
+
+/// Chat Feature ///
+const io = socketConnect(server, {
+    allowRequest: (request, callback) =>
+        callback(
+            null,
+            request.headers.referer.startsWith(`http://localhost:3000`)
+        ),
+});
+
+io.use((socket, next) => {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
+
+io.on("connection", async (socket) => {
+    console.log("[social:socket] incoming socked connection", socket.id);
+    const { user_id } = socket.request.session;
+    console.log("SOCKETSESSION", socket.request.session);
+    if (!user_id) {
+        return socket.disconnect(true);
+    }
+    const recentMessages = await getMessages();
+    console.log("remember to code Messages", recentMessages);
+    socket.emit("recentMessages", recentMessages.reverse());
+
+    socket.on("New Message", async (text) => {
+        console.log("socket ON user_id", user_id);
+        const newMessage = await storeMessage({
+            user_id: user_id,
+            message: text,
+        });
+        console.log("remember to store Messages", storeMessage);
+        console.log("New Message", newMessage);
+
+        const sender = await getUserById(newMessage.sender_id);
+
+        io.emit("broadcastMessages", {
+            ...newMessage,
+            ...sender,
+            message_id: newMessage.id,
+        });
+    });
 });
 
 /// Find People ///
@@ -224,7 +248,6 @@ app.post("/api/make-request/:otherUserId", (request, response) => {
     const otherUserId = request.params.otherUserId;
     const loggedInId = request.session.user_id;
     makeFriendRequest(loggedInId, otherUserId).then((results) => {
-        console.log("results POSTing make request", results);
         response.json(results);
     });
 });
@@ -233,7 +256,6 @@ app.post("/api/accept-request/:otherUserId", (request, response) => {
     const otherUserId = request.params.otherUserId;
     const loggedInId = request.session.user_id;
     acceptFriendRequest(loggedInId, otherUserId).then((results) => {
-        console.log("results POSTing accept request", results);
         response.json(results);
     });
 });
@@ -242,7 +264,6 @@ app.post("/api/cancel-request/:otherUserId", (request, response) => {
     const otherUserId = request.params.otherUserId;
     const loggedInId = request.session.user_id;
     cancelFriendRequest(loggedInId, otherUserId).then((results) => {
-        console.log("results POSTing cancel request", results);
         response.json(results);
     });
 });
@@ -259,46 +280,14 @@ app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-app.listen(process.env.PORT || 3001, function () {
-    console.log("I'm listening.");
-});
+// app.listen(process.env.PORT || 3001, function () {
+//     console.log("I'm listening.");
+// });
+
+server.listen(process.env.PORT || 3001, () =>
+    console.log("Socket says --> I'm Listening")
+);
 
 //npm run dev:client
 //npm run dev:server
 //psql -d social-network
-
-//
-//
-//
-///
-//
-///
-//
-//
-//
-
-/// NEED HELP To set up the reset password funciton///
-/// Reset Password 2 step process///
-// app.post("/password/reset/stepone", (request, response) => {
-//     resetCode(request.body)
-//         .then((foundUser) => {
-//             if (!foundUser) {
-//                 response
-//                     .status(401)
-//                     .json({ error: "reset request email not found" });
-//                 return;
-//             }
-//         })
-//         .catch((error) => {
-//             console.log("POST resetCode error", error);
-//             response
-//                 .status(500)
-//                 .json({ error: "failure in passoword reset request" });
-//         });
-// });
-
-// app.post("/password/reset/steptwo", (request, response) => {
-//     verifyCode();
-//     changePassword();
-//     getUserByEmail();
-// });

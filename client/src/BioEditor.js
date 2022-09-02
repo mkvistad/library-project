@@ -14,11 +14,9 @@ export default class BioEditor extends Component {
 
     handleInput(event) {
         this.setState({ userBioEdit: event.target.value });
-        console.log("event", event.target.value);
     }
 
     updateBio(e) {
-        console.log("This is working", this.state.userBioEdit);
         e.preventDefault();
         fetch("/api/bio", {
             method: "POST",
@@ -45,7 +43,6 @@ export default class BioEditor extends Component {
         });
     }
     render() {
-        console.log("props", this.props);
         return (
             <div>
                 {!this.state.textArea && (

@@ -15,7 +15,6 @@ function PictureModal({ closeModal, uploadPic }) {
                     return;
                 }
                 uploadPic(dataNewImage.profile_pic_url);
-                console.log("dataNewImage", dataNewImage);
             });
     }
     return (

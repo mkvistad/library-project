@@ -16,7 +16,6 @@ export default function Friends() {
     const accepted = friendships.filter((friendship) => friendship.accepted);
 
     function onClickAccept(event) {
-        console.log("this is the event", event);
         fetch("/api/accept-request/" + event.id, {
             method: "POST",
             body: JSON.stringify({}),
@@ -32,7 +31,6 @@ export default function Friends() {
     }
 
     function onClickDeny(event) {
-        console.log("this is the event", event);
         fetch("/api/cancel-request/" + event.id, {
             method: "POST",
             body: JSON.stringify({}),

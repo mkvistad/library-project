@@ -1,6 +1,5 @@
 const secrets = require("./secrets.json");
 const { DATABASE_PASSWORD, DATABASE_USER } = secrets;
-console.log(DATABASE_PASSWORD);
 // const DATABASE_USER = "postgres";
 // const DATABASE_PASSWORD = "postgres";
 
@@ -86,6 +85,45 @@ function updateBio({ id, bio }) {
     WHERE id = $1
     RETURNING *`,
             [id, bio]
+        )
+        .then((result) => result.rows[0]);
+}
+
+/// Chat Feature ///
+//A 'chatMessage' event handler must be attached to the one socket that just connected. There are two things that must be done in this event handler:
+
+// The new chat message must be stored in the database.
+
+// A 'chatMessage' event must be emitted to all the sockets that are currently connected, including the one that sent the message. The payload for this event should include the new chat message and its id as well as the id, first name, last name, and profile pic of the user who sent it.
+
+// A new database table will be required to store chat messages. It will need columns for the message id, the text of the message, the id of the user who sent it, and a timestamp.
+
+function getMessages(limit = 10) {
+    return db
+        .query(
+            `
+        SELECT chat_messages.id, chat_messages.sender_id, chat_messages.message,
+        chat_messages.created_at,
+        users.first_name, users.last_name, users.profile_pic_url, users.id AS user_id
+        FROM chat_messages
+        JOIN users ON sender_id = users.id
+        ORDER BY chat_messages.created_at DESC
+        LIMIT $1
+         `,
+            [limit]
+        )
+        .then((result) => result.rows);
+}
+
+function storeMessage({ user_id, message }) {
+    return db
+        .query(
+            `
+        INSERT INTO chat_messages (sender_id, message)
+        VALUES ($1, $2)        
+        RETURNING *
+         `,
+            [user_id, message]
         )
         .then((result) => result.rows[0]);
 }
@@ -189,6 +227,8 @@ module.exports = {
     login,
     setProfilePic,
     updateBio,
+    getMessages,
+    storeMessage,
     recentUsers,
     searchUsers,
     getFriendStatus,
@@ -199,56 +239,3 @@ module.exports = {
 };
 
 // psql -d social-network -f setup.sql
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/// Reset Password ///
-// const cryptoRandomString = require("crypto-random-string");
-// const secretCode = cryptoRandomString({
-//     length: 6,
-// });
-
-// function resetCode(email, secretCode) {
-//     return getUserByEmail(email).then((foundUser) => {
-//         if (!foundUser) {
-//             console.log("email not found!");
-//             return null;
-//         }
-//         return
-// .then((email, code, created_at) => {
-//             return db
-//                 .query(
-//                     `INSERT INTO reset_codes (email, code, created_at) VALUES ($1, $2, $3) RETURNING *`,
-//                     [email, code, created_at]
-//                 )
-//                 .then((result) => result.rows[0]);
-//         });
-//     });
-// }
-
-// function verifyCode() {
-//     return db.query(`SELECT * FROM reset_codes
-// WHERE CURRENT_TIMESTAMP - created_at < INTERVAL '10 minutes';`);
-// }
-
-// function changePassword() {
-//     return hash(password).then((password_hash) => {
-//         return db
-//             .query(
-//                 `INSERT INTO users (password_hash) VALUES ($1) RETURNING *`,
-//                 [password_hash]
-//             )
-//             .then((result) => result.rows[0]);
-//     });
-// }
