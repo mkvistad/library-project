@@ -220,6 +220,50 @@ function viewFriendships(user_id) {
         .then((result) => result.rows);
 }
 
+/// Delete Account **Additional Feature** ///
+//Account Deletion - Users should be allowed to delete all of the information your social network has about them. This includes:
+
+// Their rows in the users table
+function deleteAccount(user_id) {
+    return db
+        .query(
+            `
+         DELETE FROM users
+         WHERE id = $1
+     `,
+            [user_id]
+        )
+        .then((result) => result.rows[0]);
+}
+
+// All rows that have the user's id in the friendships table
+function deleteFriends(user_id) {
+    return db
+        .query(
+            `
+         DELETE FROM friendships
+         WHERE sender_id = $1 OR recipient_id = $1
+     `,
+            [user_id]
+        )
+        .then((result) => result.rows[0]);
+}
+
+// All rows that have the user's id in the chat_messages table
+function deleteMessages(user_id) {
+    return db
+        .query(
+            `
+         DELETE FROM chat_messages
+         WHERE sender_id = $1
+     `,
+            [user_id]
+        )
+        .then((result) => result.rows[0]);
+}
+// Every profile picture they have ever uploaded. This will require a change to how you store the urls of profile pics so that you have a record of every single one for every single user. It will also require you to use the deleteObject method from the AWS SDK.
+//Not needed since all profile pics are set to one default
+
 /*🚨  dont forget to export the function(s) so that it they are accessible in our server.js! */
 module.exports = {
     createUser,
@@ -236,6 +280,9 @@ module.exports = {
     acceptFriendRequest,
     cancelFriendRequest,
     viewFriendships,
+    deleteAccount,
+    deleteMessages,
+    deleteFriends,
 };
 
 // psql -d social-network -f setup.sql

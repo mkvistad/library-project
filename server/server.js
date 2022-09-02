@@ -52,6 +52,9 @@ const {
     acceptFriendRequest,
     cancelFriendRequest,
     viewFriendships,
+    deleteAccount,
+    deleteFriends,
+    deleteMessages,
 } = require("./db");
 
 // ******* End variable list ******* //
@@ -178,12 +181,10 @@ io.use((socket, next) => {
 io.on("connection", async (socket) => {
     console.log("[social:socket] incoming socked connection", socket.id);
     const { user_id } = socket.request.session;
-    console.log("SOCKETSESSION", socket.request.session);
     if (!user_id) {
         return socket.disconnect(true);
     }
     const recentMessages = await getMessages();
-    console.log("remember to code Messages", recentMessages);
     socket.emit("recentMessages", recentMessages.reverse());
 
     socket.on("New Message", async (text) => {
@@ -192,8 +193,6 @@ io.on("connection", async (socket) => {
             user_id: user_id,
             message: text,
         });
-        console.log("remember to store Messages", storeMessage);
-        console.log("New Message", newMessage);
 
         const sender = await getUserById(newMessage.sender_id);
 
@@ -275,6 +274,47 @@ app.get("/api/friendships", (request, response) => {
     });
 });
 
+/// Delete Account ***Additional Feature*** ///
+app.post("/api/delete-account", async (request, response) => {
+    const { user_id } = request.session;
+
+    try {
+        await deleteMessages(user_id);
+        await deleteFriends(user_id);
+        await deleteAccount(user_id);
+        request.session.user_id = null;
+
+        response.json({
+            error: false,
+        });
+    } catch (error) {
+        console.log("Problem deleting account", error);
+        response.status(500).json({ message: "You shall never leave..." });
+    }
+});
+//https://www.prisma.io/docs/guides/database/advanced-database-tasks/cascading-deletes/postgresql
+//const { PrismaClient } = require('@prisma/client')
+
+// const prisma = new PrismaClient()
+
+// async function main() {
+//   const userWithPost = await prisma.user.create({
+//     data: {
+//       name: 'Alice',
+//       Post: {
+//         create: { title: 'Hello World' },
+//       },
+//     },
+//   })
+
+//   try {
+//     const deletedUser = await prisma.user.delete({
+//       where: { id: userWithPost.id },
+//     })
+//   } catch (e) {
+//     console.log(e)
+//   }
+// }
 //*********  Always in end position *********//
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));

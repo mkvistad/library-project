@@ -1,6 +1,7 @@
 import PictureModal from "./PictureModal";
 import ProfilePicture from "./profilepicture.js";
 import BioEditor from "./BioEditor";
+import DeleteAccount from "./DeleteAccount";
 
 export default function Profile({
     first_name,
@@ -26,6 +27,7 @@ export default function Profile({
             {showModal && (
                 <PictureModal uploadPic={uploadPic} closeModal={closeModal} />
             )}
+            <DeleteAccount />
         </div>
     );
 }
