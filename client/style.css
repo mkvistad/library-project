@@ -1,55 +1,82 @@
+*{
+    padding:0;
+    margin:0;
+    font-family: sans-serif;
+}
 body {
     background-color: rgba(14, 137, 175, 0.69);
+
+  
+}
+.appmain{padding:1rem}
+
+header{
+    height: 80px;
+    width: 100%;
+    background-color: blue;
+    display:flex;
+    justify-content: column-start;
+    align-items: center;
+    padding: 1rem;
 }
 
+.navElements{
+    margin-right:2rem;
+    color: deeppink
+}
 .welcome {
-    font-family: Arial, Helvetica, sans-serif;
     color: sienna;
     font-style: italic;
     font-weight: lighter;
 }
 
-.welcome .logo {
-position: fixed;
-top: 200px;
-left: 10px;
-width: 300px;
-justify-items: center;
+.chat {
+    /* border: 2px solid pink; */
 }
 
-.appmain .logo {
-    position: fixed;
-        top: 10px;
-        left: 10px;
-        width: 50px;
+li {
+    list-style:none;
 }
+.messages {
+    border: 2px solid pink;
+padding: 1rem;
+}
+
+.logo {
+height:40px;
+margin-right: 10rem;
+}
+
 .button {
     box-shadow: inset;
     border-radius: 10;
     background-color: deepskyblue;
 }
 
-.HelloWorld {
-font-family: Arial, Helvetica, sans-serif;
-    color: rgb(88, 17, 1);
-    font-style: italic;
-    font-variant: small-caps;
-    font-size: xx-large;
-    margin-top: 200px;
-    margin-left: 120px;
+h1, h2, h3, h4 {
+    color: black;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+
 }
 
-.app .h4 {
-    color: black;
+.containerprofilepic {
+    display: flex;
+}
+
+.containerprofilepicitem {
+    width: 6rem;
+    margin-right: 1rem;
 }
 
 .profile-picture {
-    width: 100px;
-    height: 150px;
-    object-fit: contain;
+    height: 80px;
+       /* object-fit: contain; */
 }
 
 .containerOfFriends {
     color:black;
     object-fit: fill;
 }
+
+

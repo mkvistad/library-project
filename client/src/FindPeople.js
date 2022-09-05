@@ -50,12 +50,14 @@ export default function FindPeople() {
             <section className="recent-users">
                 <h3>Who is new?</h3>
                 {recentUsers.map((user) => (
-                    <ul key={user.id}>
-                        <img
-                            className="profile-picture"
-                            src={user.profile_pic_url || "/profilepic.jpeg"}
-                            alt="user profile picture"
-                        />
+                    <ul className="containerprofilepic" key={user.id}>
+                        <div className="containerprofilepicitem">
+                            <img
+                                className="profile-picture"
+                                src={user.profile_pic_url || "/profilepic.jpeg"}
+                                alt="user profile picture"
+                            />{" "}
+                        </div>
                         <NavLink to={"/users/" + user.id}>
                             {user.first_name} {user.last_name}
                         </NavLink>

@@ -4,7 +4,6 @@ export default function DeleteAccount() {
             method: "POST",
         }).then((response) => {
             if (response.ok) {
-                console.log("response", response.message);
                 location.replace("/goodbye");
             }
         });

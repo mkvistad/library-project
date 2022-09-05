@@ -292,29 +292,7 @@ app.post("/api/delete-account", async (request, response) => {
         response.status(500).json({ message: "You shall never leave..." });
     }
 });
-//https://www.prisma.io/docs/guides/database/advanced-database-tasks/cascading-deletes/postgresql
-//const { PrismaClient } = require('@prisma/client')
 
-// const prisma = new PrismaClient()
-
-// async function main() {
-//   const userWithPost = await prisma.user.create({
-//     data: {
-//       name: 'Alice',
-//       Post: {
-//         create: { title: 'Hello World' },
-//       },
-//     },
-//   })
-
-//   try {
-//     const deletedUser = await prisma.user.delete({
-//       where: { id: userWithPost.id },
-//     })
-//   } catch (e) {
-//     console.log(e)
-//   }
-// }
 //*********  Always in end position *********//
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "..", "client", "index.html"));

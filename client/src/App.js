@@ -57,15 +57,21 @@ export default class App extends Component {
     render() {
         return (
             <BrowserRouter>
-                <section className="appmain">
+                <header>
                     <img className="logo" src="/logo.jpg" />
-                    <header>
-                        <nav className="home">
-                            <NavLink to="/">Home</NavLink>
-                            <NavLink to="/people">Find People</NavLink>
-                            <NavLink to="/chat">Chat</NavLink>
-                        </nav>
-                    </header>
+                    <nav className="navbar">
+                        <NavLink className="navElements" to="/">
+                            Home
+                        </NavLink>
+                        <NavLink className="navElements" to="/people">
+                            Find People
+                        </NavLink>
+                        <NavLink className="navElements" to="/chat">
+                            Chat
+                        </NavLink>
+                    </nav>
+                </header>
+                <section className="appmain">
                     <section className="container">
                         <Route path="/" exact>
                             <Profile
@@ -95,7 +101,6 @@ export default class App extends Component {
                             <FindPeople />
                         </Route>
                     </section>
-                    <footer>Ⓒ Spiced Academy 2022</footer>
                 </section>
             </BrowserRouter>
         );
