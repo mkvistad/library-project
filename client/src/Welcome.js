@@ -1,24 +1,21 @@
-import RegisterForm from "./RegisterForm";
 import { BrowserRouter, Route } from "react-router-dom";
-import Login from "./login";
-import Goodbye from "./goodbye";
+import LoginForm from "./LoginForm.js";
 
 export default function Welcome() {
     return (
         <div className="welcome">
-            <h1>Welcome to the social network!</h1>
-            <img className="logo" src="/logo.jpg" />
+            <img className="Library" src="/Lirary.jpg" />
+            <link
+                href="//db.onlinewebfonts.com/c/f5a0fdbad9ec5d2a9154ec76383ac111?family=Zen+1"
+                rel="stylesheet"
+                type="text/css"
+            />
+            <h1>Welcome to the Book Vault</h1>
+
             <BrowserRouter>
                 <div>
-                    <Route exact path="/">
-                        <RegisterForm />
-                    </Route>
-                    <Route path="/goodbye">
-                        <Goodbye />
-                    </Route>
-                    <Route path="/login">
-                        {}
-                        <Login />
+                    <Route path="/">
+                        <LoginForm />
                     </Route>
                 </div>
             </BrowserRouter>
