@@ -53,7 +53,32 @@ function createBook({
         .then((result) => result.rows[0]);
 }
 
+function searchBooks(find) {
+    return db
+        .query(
+            `SELECT * FROM books
+            WHERE title ILIKE $1
+            OR authors ILIKE $1
+            ORDER BY id ASC`,
+            [find + "%"]
+        )
+        .then((result) => result.rows);
+}
+
+function getBookById(id) {
+    return db
+        .query(
+            `SELECT *
+            FROM books
+            WHERE books.id=$1`,
+            [id]
+        )
+        .then((result) => result.rows[0]);
+}
+
 module.exports = {
     createBook,
     getBooks,
+    searchBooks,
+    getBookById,
 };

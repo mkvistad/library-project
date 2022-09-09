@@ -1,86 +1,35 @@
-*{
+@import url(//db.onlinewebfonts.com/c/f5a0fdbad9ec5d2a9154ec76383ac111?family=Zen+1);
+
+html, body, main {
     padding:0;
     margin:0;
     font-family: sans-serif;
+    height: 100%
 }
 
-.Library {
-    width: 100%;
-}
-body {
-    background-color: rgba(2, 2, 2, 0.69);
-
-  
-}
-.appmain{padding:1rem}
-
-header{
-    height: 80px;
-    width: 100%;
-    background-color: blue;
-    display:flex;
-    justify-content: column-start;
-    align-items: center;
-    padding: 1rem;
+h1 {
+    font-family: "Zen 1";
+    color: rgb(59, 71, 59)
 }
 
-.navElements{
-    margin-right:2rem;
-    color: deeppink
-}
 .welcome {
-    color: sienna;
-    font-style: italic;
-    font-weight: lighter;
-}
-
-.chat {
-    /* border: 2px solid pink; */
+    height: 100%;
+    background-image: url("Library.jpg");
+    background-repeat:  no-repeat;
+    background-size:  contain;
+    background-position: center;
+    background-color: rgb(17, 15, 15) ;
 }
 
 li {
     list-style:none;
 }
-.messages {
-    border: 2px solid pink;
-padding: 1rem;
+
+.book-cover {
+    width:  120px;
 }
 
-.logo {
-height:40px;
-margin-right: 10rem;
-}
 
-.button {
-    box-shadow: inset;
-    border-radius: 10;
-    background-color: deepskyblue;
-}
 
-h1, h2, h3, h4 {
-    color: black;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-
-}
-
-.containerprofilepic {
-    display: flex;
-}
-
-.containerprofilepicitem {
-    width: 6rem;
-    margin-right: 1rem;
-}
-
-.profile-picture {
-    height: 80px;
-       /* object-fit: contain; */
-}
-
-.containerOfFriends {
-    color:black;
-    object-fit: fill;
-}
 
 

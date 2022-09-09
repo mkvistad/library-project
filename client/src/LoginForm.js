@@ -52,7 +52,7 @@ export default class LoginForm extends Component {
 
                     <button className="button">Log in</button>
                 </form>
-                <Link to="/">Please Register</Link>
+                {/* <Link to="/">Please Register</Link> */}
             </div>
         );
     }

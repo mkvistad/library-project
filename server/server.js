@@ -6,7 +6,7 @@ const path = require("path");
 const nodeISBN = require("node-isbn");
 const bookIsbn = require("./isbn.json");
 const userInfo = require("./user.json");
-const { getBooks } = require("./db");
+const { getBooks, searchBooks, getBookById } = require("./db");
 
 const { secret } = require("./secrets.json");
 const cookieSession = require("cookie-session");
@@ -84,6 +84,17 @@ app.post("/api/users/me", (request, response) => {
     } else {
         response.status(404).json(null);
     }
+});
+
+app.get("/api/books/search", async (request, response) => {
+    const searchResults = await searchBooks(request.query.q);
+    response.json(searchResults);
+});
+
+app.get("/api/books/:book_id", (request, response) => {
+    getBookById(request.params.book_id).then((result) => {
+        response.json(result);
+    });
 });
 
 //*********  Always in end position *********//
