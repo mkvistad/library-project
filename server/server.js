@@ -44,20 +44,6 @@ async function getBookByISBN(isbn) {
     });
 }
 
-// app.get("/api/books", async (request, response) => {
-//     const { isbn } = request.query;
-//     try {
-//         const book = await getBookByISBN(isbn);
-
-//         console.log("book: ", book);
-//         response.json(book);
-//     } catch (error) {
-//         console.log("GET /api/books", error);
-//         response
-//             .status(500)
-//             .json({ message: "error retrieving books information" });
-//     }
-// });
 app.get("/api/books/test", async (request, response) => {
     const allBooks = await getBooks();
 
@@ -121,14 +107,10 @@ app.get("*", function (request, response) {
     response.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
-// app.listen(process.env.PORT || 3001, function () {
-//     console.log("I'm listening.");
-// });
-
 app.listen(process.env.PORT || 3001, () =>
     console.log("Socket says --> I'm Listening")
 );
 
 //npm run dev:client
 //npm run dev:server
-//psql -d social-network
+//psql library

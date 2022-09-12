@@ -1,5 +1,4 @@
 import { Component } from "react";
-// import { NavLink } from "react-router-dom";
 
 export default class LoginForm extends Component {
     constructor(props) {
@@ -52,7 +51,6 @@ export default class LoginForm extends Component {
 
                     <button className="button">Log in</button>
                 </form>
-                {/* <Link to="/">Please Register</Link> */}
             </div>
         );
     }

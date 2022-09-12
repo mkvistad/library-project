@@ -29,12 +29,40 @@ h1 {
 
 .homepage {
     background-color: rgb(17, 15, 15);
-        text-align: left;
-        text-indent: 30px;
-        width: 40%;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: flex-start;
+    text-align: left;
+    /* text-indent: 30px; */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.intro {
+display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100vw;
+    flex-direction: column;
+}
+
+.currentReads , .faveBooks{
+    padding: 2rem;
+}
+
+ul {
+    padding-inline-start: 0;
+}
+
+.introimage {
+    position: relative;
+        margin-top: 2%;
+        margin-bottom: 2%;
+        float: right;
+        width: 100vw;
+        height: 40vh;
+        object-fit: cover;
+        object-position: bottom;
+        padding: 0;
 }
 
 .findbooks {
@@ -83,11 +111,19 @@ h1 {
 
 .current-book {
     position: relative;
-    height: 30px;
+    height: 100px;
+}
+.footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 
 .fave-books {
     line-height: 25px;
+}
+
+.faveBooks li {
+    list-style: lao!important;
 }
 
 li {
@@ -98,6 +134,7 @@ li {
     width:  120px;
 }
 
-.extras-button {
-   position: sticky;
+
+.Extras, .returnHome, .extras-button  {
+    padding: 2rem
 }

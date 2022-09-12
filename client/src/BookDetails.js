@@ -52,7 +52,9 @@ export default function BookDetails() {
 
                     {book.infoLink && <a href={book.infoLink}>More Info</a>}
                     <button>
-                        <NavLink to={"/"}>Return to the search</NavLink>
+                        <NavLink to={"/FindBooks"}>
+                            Return to the search
+                        </NavLink>
                     </button>
                 </div>
             </div>
