@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 export default function BookDetails() {
     const { book_id } = useParams();
@@ -50,6 +51,9 @@ export default function BookDetails() {
                     )}
 
                     {book.infoLink && <a href={book.infoLink}>More Info</a>}
+                    <button>
+                        <NavLink to={"/"}>Return to the search</NavLink>
+                    </button>
                 </div>
             </div>
         </div>

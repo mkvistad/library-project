@@ -58,7 +58,17 @@ function searchBooks(find) {
         .query(
             `SELECT * FROM books
             WHERE title ILIKE $1
-            OR authors ILIKE $1
+            ORDER BY id ASC`,
+            [find + "%"]
+        )
+        .then((result) => result.rows);
+}
+
+function searchAuthor(find) {
+    return db
+        .query(
+            `SELECT * FROM books
+            WHERE authors ILIKE $1
             ORDER BY id ASC`,
             [find + "%"]
         )
@@ -76,9 +86,34 @@ function getBookById(id) {
         .then((result) => result.rows[0]);
 }
 
+function getBookByTitle(find) {
+    return db
+        .query(
+            `SELECT * FROM books
+            WHERE title ILIKE $1
+            ORDER BY id ASC`,
+            [find + "%"]
+        )
+        .then((result) => result.rows[0]);
+}
+
+function getBooksByAuthor(find) {
+    return db
+        .query(
+            `SELECT * FROM books
+            WHERE authors ILIKE $1
+            ORDER BY id ASC`,
+            [find + "%"]
+        )
+        .then((result) => result.rows);
+}
+
 module.exports = {
-    createBook,
     getBooks,
+    createBook,
     searchBooks,
+    searchAuthor,
     getBookById,
+    getBookByTitle,
+    getBooksByAuthor,
 };

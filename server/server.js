@@ -6,7 +6,14 @@ const path = require("path");
 const nodeISBN = require("node-isbn");
 const bookIsbn = require("./isbn.json");
 const userInfo = require("./user.json");
-const { getBooks, searchBooks, getBookById } = require("./db");
+const {
+    getBooks,
+    searchBooks,
+    getBookById,
+    getBookByTitle,
+    searchAuthor,
+    getBooksByAuthor,
+} = require("./db");
 
 const { secret } = require("./secrets.json");
 const cookieSession = require("cookie-session");
@@ -51,21 +58,17 @@ async function getBookByISBN(isbn) {
 //             .json({ message: "error retrieving books information" });
 //     }
 // });
+app.get("/api/books/test", async (request, response) => {
+    const allBooks = await getBooks();
+
+    response.json(allBooks);
+});
 
 app.get("/api/books", async (request, response) => {
     const books = await getBooks();
     response.json(books);
 });
 
-app.get("/api/books/test", async (request, response) => {
-    let data = bookIsbn;
-
-    data.forEach(async (item) => {
-        console.log("item", item);
-        const book = await getBookByISBN(item);
-        console.log("booXXXX", book);
-    });
-});
 app.get("/api/users/me", (request, response) => {
     const userId = request.session.userId;
     if (!userId) {
@@ -91,15 +94,31 @@ app.get("/api/books/search", async (request, response) => {
     response.json(searchResults);
 });
 
+app.get("/api/books/author/search", async (request, response) => {
+    const searchResults = await searchAuthor(request.query.q);
+    response.json(searchResults);
+});
+
 app.get("/api/books/:book_id", (request, response) => {
     getBookById(request.params.book_id).then((result) => {
         response.json(result);
     });
 });
 
+app.get("/api/authors/:book_authors", (request, response) => {
+    getBooksByAuthor(request.params.book_authors).then((result) => {
+        response.json(result);
+    });
+});
+
+app.get("/api/title/search", async (request, response) => {
+    const titlesResult = await getBookByTitle(request.query.q);
+    response.json(titlesResult);
+});
+
 //*********  Always in end position *********//
-app.get("*", function (req, res) {
-    res.sendFile(path.join(__dirname, "..", "client", "index.html"));
+app.get("*", function (request, response) {
+    response.sendFile(path.join(__dirname, "..", "client", "index.html"));
 });
 
 // app.listen(process.env.PORT || 3001, function () {

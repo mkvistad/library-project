@@ -4,12 +4,18 @@ html, body, main {
     padding:0;
     margin:0;
     font-family: sans-serif;
-    height: 100%
+    color:rgb(105, 107, 105);
+    height: 100%;
+    background-color: rgb(17, 15, 15);
+}
+
+h1,h2, h3, h4 {
+    font-family: "Zen 1";
+    color: rgb(59, 71, 59)
 }
 
 h1 {
-    font-family: "Zen 1";
-    color: rgb(59, 71, 59)
+    font-size: xx-large;
 }
 
 .welcome {
@@ -21,6 +27,69 @@ h1 {
     background-color: rgb(17, 15, 15) ;
 }
 
+.homepage {
+    background-color: rgb(17, 15, 15);
+        text-align: left;
+        text-indent: 30px;
+        width: 40%;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+}
+
+.findbooks {
+    background-color: rgb(17, 15, 15);
+    text-align: left;
+    text-indent: 30px;
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.VaultLink, .SearchByAuthor, .DiscoverBooks {
+    padding: 15px;
+}
+
+.libraryStairs {
+    position:relative;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    float: right;
+    width: 60%;
+    height: 98%;
+    padding: 0;
+}
+
+.libraryShelves {
+    position: relative;
+    margin-bottom: 5%;
+    margin-top: 5%;
+    float: right;
+    width: 55%;
+    padding: 0;
+}
+
+.extras {
+    background-color: rgb(17, 15, 15);
+    text-align: left;
+    margin-left: 3%;
+    width: 40%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    line-height: 35px;
+}
+
+.current-book {
+    position: relative;
+    height: 30px;
+}
+
+.fave-books {
+    line-height: 25px;
+}
+
 li {
     list-style:none;
 }
@@ -29,7 +98,6 @@ li {
     width:  120px;
 }
 
-
-
-
-
+.extras-button {
+   position: sticky;
+}
